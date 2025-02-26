@@ -186,43 +186,40 @@ footer nav ul {
 	margin: 2em
 }
 
-
 /*btn filtre */
 
-.btn-filter button{
-	display: flex;
+.categories button{
+	
 	border-radius: 60px;
-	width: 100px;
-	height: 38px;
-	border: 1px;
-	text-align: center;
+	height: 37px;
 	border-color: #1D6154;
+	text-align: center;
 	color:#1D6154;
 	background-color: white;
 	font-family: 'syne' ;
-}
+	display: inline;
+	font-size: 16px;
+	padding: 7px 20px;
+	margin-left: 10px;
 
-.btn-filter .btn-tous{
-	width: 100px;
+}
+	
+
+.categories{
+	display: flex;
 	justify-content: center;
+	align-items: center;
+	margin-top: 50px;
+	margin-bottom: 50px;
 }
 
-.btn-filter .btn-objets{
-	width: 100px;
-	justify-content: center;
-}
-
-.btn-filter .btn-appartements{
-	width: 157px;
-	justify-content: center;
-}
-
-.btn-filter .btn-hotel{
-	width: 198px;
-	justify-content: center;
-}
-
-.btn-filter button:hover{
+.categories button:hover{
 	background-color: #1D6154;
 	color: white;
+}
+
+/*page login*/
+
+.form-container {
+    display: none;
 }

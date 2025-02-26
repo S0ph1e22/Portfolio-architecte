@@ -8,7 +8,6 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
 	<meta name="description" content="">
-	<script src="script.js"></script>
 	<link rel="stylesheet" href="./assets/style.css">
 </head>
 <body>
@@ -18,7 +17,7 @@
  		<ul>
 			<li>projets</li>
 			<li>contact</li>
-			<li>login</li>
+			<li id="loginBtn">login</li>
 			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 		</ul>
 	</nav>
@@ -37,16 +36,8 @@
 	</section>
 	<section id="portfolio">
 		<h2>Mes Projets</h2>
-		<div class="gallery">
-		</div>
-	</section>
-	<section id="filtres">
-		<div class="btn-filter">
-			<button class="btn-tous" href="#tous" > Tous </button>
-			<button class="btn-objets" href="#objets"> Objets </button>
-			<button class="btn-appartements" href="#appartements"> Appartements </button>
-			<button class="btn-hotel" href="#hotels&restaurants"> Hotels & restaurants </button>
-		</div>
+		<div class="categories"></div>
+		<div class="gallery"></div>
 	</section>
 	<section id="contact">
 		<h2>Contact</h2>
@@ -70,5 +61,6 @@
 		</ul>
 	</nav>
 </footer>
+	<script src="script.js"></script>
 </body>
 </html>
