@@ -105,32 +105,8 @@ async function fetchProjectsByCategory(categoryId) {
         }
     });
 
-/* document.addEventListener('DOMContentLoaded',function(){
 
-    const loginForm=document.querySelector("#loginForm form");
-    const errorMessage = document.getElementById('error-message');
-
-    if (loginForm){
-        loginForm.addEventListener('submit', async function(event) {
-            event.preventDefault();
-
-            const email=document.getElementById('email').value;
-            const password=document.getElementById('password').value;
-
-            const reponse= await fetch ('/login',{
-                method: 'POST',
-                headers : {'Content-type' : 'application/json'},
-                body :JSON.stringify({email,password})
-            });
-            if (!response.ok){
-                errorMessage.textContent = "Erreur dans l’identifiant ou le mot de passe";
-                errorMessage.style.display="block";
-            }else{
-                window.location.href = '/dashboard';
-            }
-        });
-    }
-}); */
+//charger les projets   
 function loadLoginForm() {
     // Utiliser fetch pour charger le contenu du fichier login.html
     fetch('login.html')     //va chercher le fichier login.html
@@ -143,12 +119,56 @@ function loadLoginForm() {
         });
 }
 
-    const loginBtn = document.getElementById('loginBtn');  //selectionner le bouton login
-    const mainContent = document.getElementsByTagName('main')[0];
+//login
+function login() {
 
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const errorMessage = document.getElementById ('errorMessage');
+
+    //cacher message d'erreur qd login
+    if (errorMessage){
+        errorMessage.style.display = 'none';
+    }
     
-document.addEventListener('DOMContentLoaded', async function() {  //fait passer le dom(index.html) avant
+    fetch('http://localhost:5678/api/users/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            })
+            .then(response => {
+                if (!response.ok){
+                    throw new Error('Erreur dans l’identifiant ou le mot de passe');
+                }
+                return response.json();
+            })
+            .then(response => {
+                if (response['token'] && response['userId']) {
+        
+                    // Stocker le token et l'ID utilisateur pour la session
+                    localStorage.setItem('token', response['token']);
+                    localStorage.setItem('userId', response['userId']);
+                     //redirection vers index si id ok
+                    window.location.href = "index.html";               
+
+                }
+            }) 
+            .catch (error => {
+            console.error('Erreur lors de la connexion :', error);    
+            if (errorMessage){ 
+                errorMessage.textContent = "Erreur dans l’identifiant ou le mot de passe";
+                errorMessage.style.display = "block";
+            }
+        });
+}
+document.addEventListener('DOMContentLoaded', async function() { 
+        const errorMessage = document.getElementById('errorMessage');
+        if (errorMessage) {
+            errorMessage.style.display = "none";} //fait passer le dom(index.html) avant
         await fetchCategories();   //att que les cat soit générer
         await fetchProjects();     //att que les projets soit générer
-        loginBtn.addEventListener('click', loadLoginForm);      //qd on clique, affiche la fonction
+
+        loginBtn.addEventListener('click', loadLoginForm); //qd on clique, affiche la fonction
+
+     
 });
