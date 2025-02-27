@@ -281,3 +281,63 @@ button.mdp-forgot{
 	text-align: center;
 	margin: auto;
 }
+
+/* mode édition */
+
+.modeEdition {
+	max-width: 1140px;
+    position: fixed;
+    top: 0;                  
+    background-color: black;  
+	width: 100%;
+    color: white;             
+    padding: 10px 20px;       
+    font-size: 16px;    
+	display: flex;  
+	align-items: center; 
+	justify-content: center;
+	height: 20px;
+	gap: 10px;
+    
+}
+
+/* Ajustement de l'icône */
+.modeEdition i {
+    font-size: 18px;  /* Taille de l'icône */
+}
+
+/* Ajustement du texte */
+.modeEdition p {
+    margin: 0;        /* Supprime les marges par défaut */
+    text-transform: none; /* Garde le texte en minuscules si nécessaire */
+}
+
+/*modifier projet*/
+
+.modifierProjet {
+    display: flex;               
+    align-items: center;    
+	justify-content: center;                 
+}
+
+
+.modifierProjet i {
+    display: flex;                                
+    font-size: 14px;   
+	margin-bottom: 30px;  
+	gap: 55px; 
+	margin-left: 20px;
+}
+
+.modifier:hover{
+	text-decoration: underline;
+}
+
+.modifier {
+    background: none;
+    border: none;
+    font-size: 14px;
+    color: black;     
+	margin-bottom: 30px;  
+	cursor: default;
+}

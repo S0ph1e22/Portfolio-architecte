@@ -148,9 +148,8 @@ function login() {
                     // Stocker le token et l'ID utilisateur pour la session
                     localStorage.setItem('token', response['token']);
                     localStorage.setItem('userId', response['userId']);
-                     //redirection vers index si id ok
-                    window.location.href = "index.html";               
-
+                    //redirection vers index si id ok
+                    window.location.href = "edition.html";   
                 }
             }) 
             .catch (error => {
@@ -159,16 +158,42 @@ function login() {
                 errorMessage.textContent = "Erreur dans l’identifiant ou le mot de passe";
                 errorMessage.style.display = "block";
             }
-        });
+        });  
 }
+
+function logout(){
+
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+
+    const loginBtn = document.getElementById('loginBtn');
+    if (loginBtn){
+        loginBtn.innerText = "Login";
+        loginBtn.removeEventListener('click', logout);
+        loginBtn.addEventListener('click', loadLoginForm);
+        window.location.href = "index.html";
+    }
+   
+}
+
 document.addEventListener('DOMContentLoaded', async function() { 
         const errorMessage = document.getElementById('errorMessage');
+        const loginBtn = document.getElementById('loginBtn');
+
         if (errorMessage) {
             errorMessage.style.display = "none";} //fait passer le dom(index.html) avant
+        
+        const token = localStorage.getItem('token');
+        if (token) {                                    //si connexion
+            loginBtn.innerText = "Logout";   //change login en logout
+            loginBtn.removeEventListener('click', loadLoginForm); // Retirer le gestionnaire "Login"
+            loginBtn.addEventListener('click', logout); // Ajouter l'événement de déconnexion          
+        }else{
+            loginBtn.addEventListener('click',loadLoginForm);
+            loginBtn.addEventListener('click', loadLoginForm); // Ajouter le gestionnaire "Login"
+        }
+        
         await fetchCategories();   //att que les cat soit générer
         await fetchProjects();     //att que les projets soit générer
-
-        loginBtn.addEventListener('click', loadLoginForm); //qd on clique, affiche la fonction
-
-     
 });
+
