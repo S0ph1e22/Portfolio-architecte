@@ -189,7 +189,6 @@ document.addEventListener('DOMContentLoaded', async function() {
             loginBtn.removeEventListener('click', loadLoginForm); // Retirer le gestionnaire "Login"
             loginBtn.addEventListener('click', logout); // Ajouter l'événement de déconnexion          
         }else{
-            loginBtn.addEventListener('click',loadLoginForm);
             loginBtn.addEventListener('click', loadLoginForm); // Ajouter le gestionnaire "Login"
         }
         
@@ -210,24 +209,78 @@ const openModal = function(e){
     modal.style.display = null;
     modal.removeAttribute ('aria-hidden');
     modal.setAttribute ('aria-modal', 'true');
+
     modal.querySelector('.js-modal-close') .addEventListener('click', closeModal);
     modal.querySelector('.js-modal-stop') .addEventListener('click', stopPropagation);
 
     //avoir la mini gallery
+    
+    fetchProjects().then(() => {
+        const gallery = document.querySelector(".gallery");
+        const modalWrapper = modal.querySelector(".modal-wrapper" );
+        if (gallery && modalWrapper) {
+                const existingClone = modalWrapper.querySelector(".gallery-modal"); 
+                if (!existingClone) { 
+                    const galleryClone = gallery.cloneNode(true);
+                    galleryClone.classList.add("gallery-modal");
+                    modalWrapper.appendChild(galleryClone);
 
-    fetchProjects();
-    const gallery = document.querySelector(".gallery");
-    const modalWrapper = modal.querySelector(".modal-wrapper");
+                    //ajout icone poubelle
+                    const imagesInModal = modalWrapper.querySelectorAll('img');
+                    imagesInModal.forEach(img => {
+                        const deleteBtn = document.createElement('button');
+                        deleteBtn.classList.add('delete-project');
+                        deleteBtn.innerHTML = `<i class="btn-delete fa-regular fa-trash-can" aria-hidden="true"></i>`;
 
-    if (gallery && modalWrapper) {
-        const existingClone = modalWrapper.querySelector(".gallery-modal"); 
-        if (!existingClone) { 
-            const galleryClone = gallery.cloneNode(true);
-            galleryClone.classList.add("gallery-modal");
-            modalWrapper.appendChild(galleryClone);
+                        img.parentElement.style.position="relative";
+                        img.parentElement.appendChild(deleteBtn);
+
+                        //écoute pour supp le projet
+                        deleteBtn.addEventListener('click', function () {
+                            const projectId = img.dataset.id;  
+                            deleteProject(projectId, img);
+                        });
+    
+                        img.parentElement.appendChild(deleteBtn);
+                    });
+                }
         }
-    }
+    });
 };
+
+/*A VERIFIER // Fonction pour supprimer un projet
+async function deleteProject(projectId, imgElement) {
+    try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            console.log("Token non trouvé. Vous devez être connecté.");
+            return;
+        }
+
+        const response = await fetch(`http://localhost:5678/api/works/${projectId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Erreur lors de la suppression du projet: ${response.status}`);
+        }
+
+        // Supprimer l'image du modal
+        imgElement.parentElement.remove(); // Supprime l'image et l'icône de poubelle associée
+        console.log(`Projet ${projectId} supprimé`);
+    } catch (error) {
+        console.error("Erreur lors de la suppression du projet :", error);
+    }
+} */
+
+
+
+
+
 
 const closeModal = function (e){
     if (modal ===null) return
@@ -238,31 +291,32 @@ const closeModal = function (e){
     modal.removeEventListener ('click', closeModal);
     modal.querySelector('.js-modal-close') .removeEventListener('click', closeModal);
     modal.querySelector('.js-modal-stop') .removeEventListener('click', stopPropagation);
+    
     const galleryClone = modal.querySelector (".gallery-modal");
     if (galleryClone){
         galleryClone.remove();
     }
     modal = null;
-}
+};
 
 //empeche que qd on clique a l'intérieur le modal
 const stopPropagation = function (e){
     e.stopPropagation();
-}
+};
 
 const focusInModal = function (e){
     e.preventDefault();
     let index = focusables.findIndex( f => f === modal.querySelector(':focus'));
-    index++
+    index++;
     if (index >= focusables.length){
-        index=0
+        index=0;
     }
-    focusables[index].focus()
-}
+    focusables[index].focus();
+};
 
 document.querySelectorAll('.js-modal').forEach (a =>{
     a.addEventListener ('click', openModal);
-})
+});
 
 window.addEventListener ('keydown', function(e){
     if (e.key === "Escape" || e.key === 'Esc'){
@@ -271,4 +325,9 @@ window.addEventListener ('keydown', function(e){
     if (e.key=== 'Tab' && modal !== null){
         focusInModal (e);
     }
-})
+});
+
+
+
+
+//delete

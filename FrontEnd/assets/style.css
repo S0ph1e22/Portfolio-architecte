@@ -367,7 +367,9 @@ button.mdp-forgot{
 
 .gallery-modal {
     display: grid;
-	grid-template-columns: repeat(5, 1fr);
+	grid-template-columns: repeat(5, 0fr);
+	justify-content: center;
+	align-items: center;
 }
 
 .gallery-modal img {
@@ -401,7 +403,7 @@ button.mdp-forgot{
     top: 569px;
     left: 50%;
     transform: translateX(-50%);
-    width: 420px; 
+    width: 460px; 
     height: 1px;
    	background-color: rgba(179, 179, 179, 1);
 }
@@ -413,4 +415,31 @@ button.js-modal-close{
 	position: absolute;
 	top: 26px;
 	right: 26px;
+}
+
+/*delete*/
+ 
+.delete-project{
+	position: absolute;
+	background-color: black;
+	color: red;
+	height: 17px;
+	width: 17px;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 2px;
+	z-index: 10;
+	top: 142px;
+	left: 54px;
+}
+
+i.btn-delete.fa-regular.fa-trash-can{
+	color: white;
+	width: 9px;
+	height: 10.29px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
