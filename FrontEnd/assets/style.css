@@ -139,7 +139,7 @@ li:hover {
 }
 #contact {
 	width: 50%;
-margin: auto;
+	margin: auto;
 }
 #contact > * {
 	text-align: center;
@@ -285,31 +285,31 @@ button.mdp-forgot{
 /* mode édition */
 
 .modeEdition {
-	max-width: 1140px;
     position: fixed;
-    top: 0;                  
+    top: 0;    
+	right: 0;
+	left: 0;        
     background-color: black;  
 	width: 100%;
     color: white;             
-    padding: 10px 20px;       
+    gap: 10px;     
     font-size: 16px;    
 	display: flex;  
 	align-items: center; 
 	justify-content: center;
-	height: 20px;
-	gap: 10px;
-    
+	height: 30px;
 }
+
 
 /* Ajustement de l'icône */
 .modeEdition i {
-    font-size: 18px;  /* Taille de l'icône */
+    font-size: 18px;  
 }
 
 /* Ajustement du texte */
 .modeEdition p {
-    margin: 0;        /* Supprime les marges par défaut */
-    text-transform: none; /* Garde le texte en minuscules si nécessaire */
+    margin: 0;       
+    text-transform: none; 
 }
 
 /*modifier projet*/
@@ -329,15 +329,88 @@ button.mdp-forgot{
 	margin-left: 20px;
 }
 
-.modifier:hover{
-	text-decoration: underline;
-}
-
-.modifier {
+.modifierProjet a{
     background: none;
     border: none;
     font-size: 14px;
     color: black;     
 	margin-bottom: 30px;  
 	cursor: default;
+	text-decoration: none;
+}
+
+/*modal */
+
+.modal{
+	position: fixed;
+	transform: translate(-50%, -50%);
+	top: 50%;
+	left: 50%;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+}
+
+.modal-wrapper{
+	overflow: auto;
+	background-color: white;
+	padding: 20px;
+	border-radius: 10px;
+	position: relative;
+	width: 630px;
+	height: 688px;
+}
+
+.modal figcaption{
+	display: none;
+}
+
+.gallery-modal {
+    display: grid;
+	grid-template-columns: repeat(5, 1fr);
+}
+
+.gallery-modal img {
+	width: 76.61px;
+    height: 102.57px;
+	position: relative;
+	top: 136px;
+}
+
+.modal p{
+	font-size: 26px ;
+	text-align: center;
+	position: absolute;
+	top: 60px;
+	transform: translateX(-50%);
+	left: 50%;
+}
+
+.modal input[type="submit"]{
+	height: 36px;
+	width: 237px;
+	font-size: 14px;
+	position: absolute;
+	top: 607px;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.modal .input-border {
+    position: absolute;
+    top: 569px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 420px; 
+    height: 1px;
+   	background-color: rgba(179, 179, 179, 1);
+}
+
+button.js-modal-close{
+	border: none;
+	background-color: white;
+	font-size: 24px;	
+	position: absolute;
+	top: 26px;
+	right: 26px;
 }
