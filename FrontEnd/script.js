@@ -248,7 +248,7 @@ const openModal = function(e){
     });
 };
 
-/*A VERIFIER // Fonction pour supprimer un projet
+// Fonction pour supprimer un projet
 async function deleteProject(projectId, imgElement) {
     try {
         const token = localStorage.getItem('token');
@@ -270,17 +270,12 @@ async function deleteProject(projectId, imgElement) {
         }
 
         // Supprimer l'image du modal
-        imgElement.parentElement.remove(); // Supprime l'image et l'icône de poubelle associée
+        imgElement.parentElement.remove(); //supp img + icone
         console.log(`Projet ${projectId} supprimé`);
     } catch (error) {
         console.error("Erreur lors de la suppression du projet :", error);
     }
-} */
-
-
-
-
-
+} 
 
 const closeModal = function (e){
     if (modal ===null) return

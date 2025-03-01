@@ -209,7 +209,6 @@ footer{
 	font-size: 16px;
 	padding: 7px 20px;
 	margin-left: 10px;
-
 }
 	
 
@@ -422,10 +421,8 @@ button.js-modal-close{
 .delete-project{
 	position: absolute;
 	background-color: black;
-	color: red;
 	height: 17px;
 	width: 17px;
-	text-align: center;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -435,11 +432,12 @@ button.js-modal-close{
 	left: 54px;
 }
 
-i.btn-delete.fa-regular.fa-trash-can{
+i.btn-delete{
 	color: white;
 	width: 9px;
-	height: 10.29px;
+	height: 11px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	background: transparent;
 }
