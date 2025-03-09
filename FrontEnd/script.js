@@ -230,7 +230,7 @@ const openModal = function(e){
                     imagesInModal.forEach(img => {
                         const deleteBtn = document.createElement('button');
                         deleteBtn.classList.add('delete-project');
-                        deleteBtn.innerHTML = `<i class="btn-delete fa-regular fa-trash-can" aria-hidden="true"></i>`;
+                        deleteBtn.innerHTML = `<i class="btn-delete fa-regular fa-trash-can fa-xs" aria-hidden="true"></i>`;
 
                         img.parentElement.style.position="relative";
                         img.parentElement.appendChild(deleteBtn);
@@ -279,6 +279,7 @@ async function deleteProject(projectId, imgElement) {
 
 const closeModal = function (e){
     if (modal ===null) return
+    
     e.preventDefault();
     modal.style.display = "none";
     modal.setAttribute ('aria-hidden', "true");
@@ -294,7 +295,7 @@ const closeModal = function (e){
     modal = null;
 };
 
-//empeche que qd on clique a l'intérieur le modal
+//empeche que qd on clique a l'intérieur le modal se ferme
 const stopPropagation = function (e){
     e.stopPropagation();
 };
