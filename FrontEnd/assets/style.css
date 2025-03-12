@@ -300,12 +300,10 @@ button.mdp-forgot{
 }
 
 
-/* Ajustement de l'icône */
 .modeEdition i {
     font-size: 18px;  
 }
 
-/* Ajustement du texte */
 .modeEdition p {
     margin: 0;       
     text-transform: none; 

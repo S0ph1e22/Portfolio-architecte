@@ -149,7 +149,7 @@ function login() {
                     localStorage.setItem('token', response['token']);
                     localStorage.setItem('userId', response['userId']);
                     //redirection vers index si id ok
-                    window.location.href = "edition.html";   
+                    window.location.href = "index.html";
                 }
             }) 
             .catch (error => {
@@ -160,6 +160,35 @@ function login() {
             }
         });  
 }
+
+//ajout mode edition
+document.addEventListener("DOMContentLoaded", function () {
+    let token = localStorage.getItem("token");
+
+    if (token) {
+        console.log("affichage en cours");
+        
+        let nouvelleDiv = document.createElement("div");
+        nouvelleDiv.classList.add("modeEdition");
+
+        let nouvelIcone = document.createElement("i");
+        nouvelIcone.classList.add("fa-regular", "fa-pen-to-square");
+
+        let nouveauParagraphe = document.createElement("p");
+        nouveauParagraphe.textContent = "Mode édition";
+
+        // Ajout des éléments à la div
+        nouvelleDiv.appendChild(nouvelIcone);
+        nouvelleDiv.appendChild(nouveauParagraphe);
+
+        // Vérifie si <header> existe
+        let header = document.querySelector("header");
+        header.appendChild(nouvelleDiv);
+            console.log("mode édition");
+    }
+});
+
+//ajout btn modifier
 
 function logout(){
 
