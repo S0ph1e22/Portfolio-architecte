@@ -18,7 +18,7 @@ async function fetchProjects() {
         projects.forEach(project => {
             const projectElement = document.createElement("figure");
             projectElement.innerHTML = `
-                <img src="${project.imageUrl}" alt="${project.title}">
+                <img id="${project.id}" src="${project.imageUrl}" alt="${project.title}">
                 <figcaption>${project.title}</figcaption>`;
             gallery.appendChild(projectElement);
         });
@@ -265,6 +265,12 @@ document.addEventListener('DOMContentLoaded', async function() {
         await fetchProjects();     //att que les projets soit générer
 });
 
+//mettre fond gris
+document.addEventListener("DOMContentLoaded", function () {
+    const modalOverlay = document.createElement("div");
+    modalOverlay.classList.add("modal-overlay");
+    document.body.appendChild(modalOverlay);
+});
 
 //ouvrir la modal avec btn modifier
 
@@ -279,8 +285,15 @@ const openModal = function(e){
     modal.style.display = null;
     modal.removeAttribute ('aria-hidden');
     modal.setAttribute ('aria-modal', 'true');
+    
+    //changer la couleur du background
+    document.querySelector(".modal-overlay").style.display = "block";
 
-    modal.querySelector('.js-modal-close') .addEventListener('click', closeModal);
+    //fermer qd on clique a l'xt
+    modal.addEventListener ('click', closeModal);
+
+    //fermer qd clique sur la croix + empecher click a l'intérieur
+    modal.querySelector('.js-modal-close').addEventListener('click', closeModal);
     modal.querySelector('.js-modal-stop') .addEventListener('click', stopPropagation);
 
     //avoir la mini gallery
@@ -292,6 +305,7 @@ const openModal = function(e){
                 if (!existingClone) { 
                     const galleryClone = gallery.cloneNode(true);
                     galleryClone.classList.add("gallery-modal");
+                    galleryClone.classList.remove("gallery");
                     modalWrapper.appendChild(galleryClone);
 
                     //ajout icone poubelle
@@ -306,7 +320,7 @@ const openModal = function(e){
 
                         //écoute pour supp le projet
                         deleteBtn.addEventListener('click', function () {
-                            const projectId = img.dataset.id;  
+                            const projectId = img.id;  
                             deleteProject(projectId, img);
                         });
     
@@ -319,14 +333,19 @@ const openModal = function(e){
 
 //fermer la modal
 const closeModal = function (e){
-    if (modal ===null) return
-    
+    if (modal === null) return;
+
     e.preventDefault();
     modal.style.display = "none";
     modal.setAttribute ('aria-hidden', "true");
     modal.removeAttribute ('aria-modal');
+
+    //remettre background en blanc
+    document.querySelector(".modal-overlay").style.display = "none";
+
+    
     modal.removeEventListener ('click', closeModal);
-    modal.querySelector('.js-modal-close') .removeEventListener('click', closeModal);
+    modal.querySelector('.js-modal-close').removeEventListener('click', closeModal);
     modal.querySelector('.js-modal-stop') .removeEventListener('click', stopPropagation);
     
     const galleryClone = modal.querySelector (".gallery-modal");
@@ -334,6 +353,7 @@ const closeModal = function (e){
         galleryClone.remove();
     }
     modal = null;
+
 };
 
 //empeche que qd on clique a l'intérieur le modal se ferme
@@ -369,6 +389,7 @@ window.addEventListener ('keydown', function(e){
 async function deleteProject(projectId, imgElement) {
     try {
         const token = localStorage.getItem('token');
+        console.log(token);
         if (!token) {
             console.log("Token non trouvé. Vous devez être connecté.");
             return;
@@ -382,13 +403,18 @@ async function deleteProject(projectId, imgElement) {
             }
         });
 
+        console.log(response);
+
+        const responseText = await response.text();
+        console.log("Statut HTTP :", response.status);
+
         if (!response.ok) {
             throw new Error(`Erreur lors de la suppression du projet: ${response.status}`);
         }
 
         // Supprimer l'image du modal
         imgElement.parentElement.remove(); //supp img + icone
-        console.log(`Projet ${projectId} supprimé`);
+        console.log(`Le projet ${projectId} a bien été supprimé`);
     } catch (error) {
         console.error("Erreur lors de la suppression du projet :", error);
     }
