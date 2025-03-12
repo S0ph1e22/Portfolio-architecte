@@ -217,19 +217,19 @@ document.addEventListener("DOMContentLoaded", function(){
                 modifierProjetDiv.appendChild(nouvelIcone);
                 modifierProjetDiv.appendChild(nouveauLien);
 
-                //insère div ap h2
+                //insère div apres h2
                 let h2 = portfolioSection.querySelector("h2");
                     h2.insertAdjacentElement("afterend", modifierProjetDiv);
             }
                 console.log("Bouton Modifier ajouté");
             }
+            document.querySelectorAll('.js-modal').forEach(a => {
+                a.addEventListener('click', openModal);
+            });
     }
 });
-   
 
-
-
-
+//deconnexion
 function logout(){
 
     localStorage.removeItem('token');
@@ -265,7 +265,8 @@ document.addEventListener('DOMContentLoaded', async function() {
         await fetchProjects();     //att que les projets soit générer
 });
 
-//fenetre ajout
+
+//ouvrir la modal avec btn modifier
 
 let modal = null
 const focusableSelector = "button, a, input, textarea"
@@ -283,7 +284,6 @@ const openModal = function(e){
     modal.querySelector('.js-modal-stop') .addEventListener('click', stopPropagation);
 
     //avoir la mini gallery
-    
     fetchProjects().then(() => {
         const gallery = document.querySelector(".gallery");
         const modalWrapper = modal.querySelector(".modal-wrapper" );
@@ -317,35 +317,7 @@ const openModal = function(e){
     });
 };
 
-// Fonction pour supprimer un projet
-async function deleteProject(projectId, imgElement) {
-    try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            console.log("Token non trouvé. Vous devez être connecté.");
-            return;
-        }
-
-        const response = await fetch(`http://localhost:5678/api/works/${projectId}`, {
-            method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error(`Erreur lors de la suppression du projet: ${response.status}`);
-        }
-
-        // Supprimer l'image du modal
-        imgElement.parentElement.remove(); //supp img + icone
-        console.log(`Projet ${projectId} supprimé`);
-    } catch (error) {
-        console.error("Erreur lors de la suppression du projet :", error);
-    }
-} 
-
+//fermer la modal
 const closeModal = function (e){
     if (modal ===null) return
     
@@ -393,6 +365,31 @@ window.addEventListener ('keydown', function(e){
 });
 
 
+// Fonction pour supprimer un projet
+async function deleteProject(projectId, imgElement) {
+    try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            console.log("Token non trouvé. Vous devez être connecté.");
+            return;
+        }
 
+        const response = await fetch(`http://localhost:5678/api/works/${projectId}`, {
+            method: 'DELETE',
+            headers: {
+                'Accept' : '*/*',
+                'Authorization': `Bearer ${token}`,
+            }
+        });
 
-//delete
+        if (!response.ok) {
+            throw new Error(`Erreur lors de la suppression du projet: ${response.status}`);
+        }
+
+        // Supprimer l'image du modal
+        imgElement.parentElement.remove(); //supp img + icone
+        console.log(`Projet ${projectId} supprimé`);
+    } catch (error) {
+        console.error("Erreur lors de la suppression du projet :", error);
+    }
+} 
