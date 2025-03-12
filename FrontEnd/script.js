@@ -148,7 +148,7 @@ function login() {
                     // Stocker le token et l'ID utilisateur pour la session
                     localStorage.setItem('token', response['token']);
                     localStorage.setItem('userId', response['userId']);
-                    //redirection vers index si id ok
+                    //redirection vers index avec mode edition si id ok
                     window.location.href = "index.html";
                 }
             }) 
@@ -188,7 +188,47 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-//ajout btn modifier
+//ajout btn modifier ds section portfolio
+
+document.addEventListener("DOMContentLoaded", function(){
+    let token = localStorage.getItem('token');
+
+    if (token){
+        console.log ("affiche btn modifier");
+
+        let portfolioSection = document.querySelector("#portfolio");
+
+         if (portfolioSection) {
+            let modifierProjetDiv = document.querySelector(".modifierProjet");
+
+            if (!modifierProjetDiv) {
+               
+                modifierProjetDiv = document.createElement("div");
+                modifierProjetDiv.classList.add("modifierProjet");
+
+                let nouvelIcone = document.createElement('i');
+                nouvelIcone.classList.add("fa-regular", "fa-pen-to-square");
+
+                let nouveauLien = document.createElement("a");
+                nouveauLien.textContent = "modifier";
+                nouveauLien.href = "#modifier"; 
+                nouveauLien.classList.add("js-modal");
+              
+                modifierProjetDiv.appendChild(nouvelIcone);
+                modifierProjetDiv.appendChild(nouveauLien);
+
+                //insère div ap h2
+                let h2 = portfolioSection.querySelector("h2");
+                    h2.insertAdjacentElement("afterend", modifierProjetDiv);
+            }
+                console.log("Bouton Modifier ajouté");
+            }
+    }
+});
+   
+
+
+
 
 function logout(){
 

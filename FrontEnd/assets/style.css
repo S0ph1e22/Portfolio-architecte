@@ -121,10 +121,13 @@ li:hover {
 #introduction p {
 	margin-bottom: 0.5em;
 }
+
 #portfolio h2 {
 	text-align: center;
 	margin-bottom: 1em;
+	display: inline-flex;
 }
+
 .gallery {
 	width: 100%;
 	display: grid;
@@ -143,8 +146,8 @@ li:hover {
 }
 #contact > * {
 	text-align: center;
-
 }
+
 #contact h2{
 	margin-bottom: 20px;
 }
@@ -195,6 +198,10 @@ footer{
 }
 
 /*btn filtre */
+
+figcaption {
+    text-align: left;
+}
 
 .categories button{
 	
@@ -310,31 +317,30 @@ button.mdp-forgot{
 }
 
 /*modifier projet*/
-
-.modifierProjet {
-    display: flex;               
-    align-items: center;    
-	justify-content: center;                 
+#portfolio {
+    text-align: center; 
 }
-
+.modifierProjet {
+    display: inline-flex;   
+    align-items: center;    
+    margin-left: 20px;      
+    position: relative;   
+	vertical-align: 5px;
+}
 
 .modifierProjet i {
-    display: flex;                                
-    font-size: 14px;   
-	margin-bottom: 30px;  
-	gap: 55px; 
-	margin-left: 20px;
+    margin-right: 6px; 
+    width: 15.58px;
+    height: 15.58px;
 }
 
-.modifierProjet a{
-    background: none;
-    border: none;
-    font-size: 14px;
-    color: black;     
-	margin-bottom: 30px;  
-	cursor: default;
-	text-decoration: none;
+.modifierProjet a {
+    text-decoration: none;
+    color: black;
+    font-size: 16px;
+    display: inline-block; 
 }
+
 
 /*modal */
 
