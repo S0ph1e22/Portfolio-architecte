@@ -265,15 +265,19 @@ document.addEventListener('DOMContentLoaded', async function() {
         await fetchProjects();     //att que les projets soit générer
 });
 
-//mettre fond gris
+//mettre fond gris + clique fond pour fermer la modal
 document.addEventListener("DOMContentLoaded", function () {
     const modalOverlay = document.createElement("div");
     modalOverlay.classList.add("modal-overlay");
     document.body.appendChild(modalOverlay);
+
+    // Fermer la modal en cliquant sur l'overlay
+    modalOverlay.addEventListener("click", function () {
+        closeModal(new Event("click"));
+    });
 });
 
 //ouvrir la modal avec btn modifier
-
 let modal = null
 const focusableSelector = "button, a, input, textarea"
 let focusables = []
