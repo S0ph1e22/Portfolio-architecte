@@ -419,7 +419,15 @@ async function deleteProject(projectId, imgElement) {
         // Supprimer l'image du modal
         imgElement.parentElement.remove(); //supp img + icone
         console.log(`Le projet ${projectId} a bien été supprimé`);
-    } catch (error) {
+     } catch (error) {
         console.error("Erreur lors de la suppression du projet :", error);
     }
-} 
+
+    //supp l'image de la gallery sans recharger la page
+    const projectInGallery = document.querySelector(`.gallery img[id='${projectId}']`);
+        if (projectInGallery) {
+            const figureToRemove = projectInGallery.closest('figure'); //trouve l'élément parent
+            figureToRemove.remove();
+            console.log(` Le projet ${projectId} a bien été supprimé de la galerie.`);
+        }
+}
