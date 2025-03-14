@@ -452,5 +452,109 @@ i.btn-delete{
 	background: transparent;
 }
 
+/*ajout photo*/
 
+.btn-valider{
+	background-color: rgba(167, 167, 167, 1);
+}
 
+button#back{
+	font-size: 21px;
+	position: absolute;
+	background-color: white;
+	border: none;
+}
+
+#addNewProject {
+    width: 420px;
+    margin: 0 auto;
+    padding: 20px;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+}
+
+label#addPicture {
+    font-size: 16px;
+    margin-bottom: 8px;
+	margin-top: 80px;
+    display: block;
+    color: rgba(61, 61, 61, 1);
+}
+
+label#title{
+	position: absolute;
+	font-size: 14px;
+    margin-bottom: 4px; 
+    margin-top: 40px; 
+    display: block;
+    color: rgba(61, 61, 61, 1);
+}
+
+label#categorie{
+	position: absolute;
+	font-size: 14px;
+	margin-bottom: 4px;  
+    margin-top: 155px;  
+    display: block;
+    color: rgba(61, 61, 61, 1);
+}
+
+input#categoryUpload{
+	position: absolute;
+	left: 50%; 
+    transform: translateX(-50%); 
+    width: 396px;
+    padding: 10px;
+	margin-top: 180px;
+	height: 27px;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	border: none;
+
+}
+
+input#titleUpload{
+	left: 50%; 
+    transform: translateX(-50%); 
+	position: absolute; 
+	width: 396px;
+    padding: 10px;
+	height: 27px;
+	margin-top: 65px; 
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	border: none;
+}
+
+.ajoutImage{
+	border-radius: 3px;
+	background-color:rgba(232, 241, 246, 1) ;
+	margin-top: 80px;
+    height: 169px;
+}
+
+i.btn-image{
+	position: absolute;
+	left: 50%; 
+    transform: translateX(-50%); 
+	top: 115px;
+	color: rgba(185, 197, 204, 1);
+}
+
+p#formatImage{
+	font-size: 10px;
+	top: 240px;
+}
+
+#customBtn{
+	position: absolute;
+	transform: translateX(-50%); 
+	left: 50%; 
+	border-radius: 50px;
+	background-color: rgba(203, 214, 220, 1);
+	font-size: 14px;
+	border: none;
+	top: 190px;
+	width: 173px;
+	height: 36px;
+	color: rgba(48, 102, 133, 1);
+}

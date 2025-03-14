@@ -44,7 +44,22 @@
 				<p> Galerie photo </p>
 				<button class="js-modal-close"><i class="fa-solid fa-xmark"></i></button>
 				<hr>
-				<input type="submit" value=" Ajouter une photo">
+				<input type="submit" id="addProject"value=" Ajouter une photo">
+				<button id="back"><i class="fa-solid fa-arrow-left"></i></button>
+				<form id="addNewProject">
+					<div class="ajoutImage">
+						<i class="btn-image fa-regular fa-image fa-4x"></i>
+						<input type="file" name="image" id="imageUpload" style="display: none;" required>
+						<button type="button" id="customBtn">+ Ajouter photo </button>
+						<p id="formatImage"> jpg, png : 4mo max </p>
+					</div>
+					<label for="title" id="title"> Titre </label>
+					<input type="text" name="title" id="titleUpload" required>
+
+					<label for="text" id="categorie"> Catégorie</label>
+					<input type="text" name="category" id="categoryUpload" required>
+
+				</form>
 			</div>
 		</aside>
 		<div class="categories"></div>

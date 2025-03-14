@@ -255,10 +255,10 @@ document.addEventListener('DOMContentLoaded', async function() {
         const token = localStorage.getItem('token');
         if (token) {                                    //si connexion
             loginBtn.innerText = "Logout";   //change login en logout
-            loginBtn.removeEventListener('click', loadLoginForm); // Retirer le gestionnaire "Login"
-            loginBtn.addEventListener('click', logout); // Ajouter l'événement de déconnexion          
+            loginBtn.removeEventListener('click', loadLoginForm); 
+            loginBtn.addEventListener('click', logout);        
         }else{
-            loginBtn.addEventListener('click', loadLoginForm); // Ajouter le gestionnaire "Login"
+            loginBtn.addEventListener('click', loadLoginForm); 
         }
         
         await fetchCategories();   //att que les cat soit générer
@@ -346,6 +346,7 @@ const closeModal = function (e){
 
     //remettre background en blanc
     document.querySelector(".modal-overlay").style.display = "none";
+    form.style.display = "none";
 
     
     modal.removeEventListener ('click', closeModal);
@@ -431,3 +432,133 @@ async function deleteProject(projectId, imgElement) {
             console.log(` Le projet ${projectId} a bien été supprimé de la galerie.`);
         }
 }
+
+//ajouter un projet
+
+document.addEventListener("DOMContentLoaded", function(event) {
+    event.preventDefault();
+   
+    const galleryText = document.querySelector(".modal-wrapper > p");
+    const gallery = document.querySelector(".gallery-modal");
+    const form = document.getElementById("addNewProject");
+    const backButton = document.getElementById("back");
+   
+
+    if (gallery) gallery.style.display = "grid";  // Afficher la galerie 
+    if (backButton) backButton.style.display = "none"; //cacher btn retour
+    if (form) form.style.display = "none"; // Cacher le formulaire 
+    if (galleryText) galleryText.textContent = "Galerie photo"; //affiche txt
+});  
+
+//fct click sur le btn ajouter une photo
+document.getElementById("addProject").addEventListener("click", function(event){
+    event.preventDefault();
+    console.log("btn ajout projet cliqué");
+
+     //selectionner gallery et form
+    const galleryText = document.querySelector(".modal-wrapper > p");
+    const gallery = document.querySelector(".gallery-modal");
+    const form = document.getElementById("addNewProject");
+    const addProjectBtn = document.getElementById("addProject");
+
+  
+  if (gallery) gallery.style.display = "none"; //masquer gallery
+  if (form)form.style.display = "block"; //afficher form
+  if (galleryText) galleryText.textContent = "Ajout photo"; //changer le titre
+  if (addProjectBtn){ 
+    addProjectBtn.value = "valider"; //changer txt du btn
+    addProjectBtn.classList.add("btn-valider");
+    addProjectBtn.style.backgroundColor = "rgba(167, 167, 167, 1)"; //couleur background btn valider
+    addProjectBtn.style.border="none";
+    }
+});
+
+
+document.getElementById("back").addEventListener("click", function(){
+    const galleryText = document.querySelector(".modal-wrapper > p");
+    const gallery = document.querySelector(".gallery-modal");
+    const form = document.getElementById("addNewProject");
+    const addProjectBtn = document.getElementById("addProject");
+    const backButton = document.getElementById("back");
+
+
+    if (gallery) gallery.style.display = "grid"; // Réafficher la galerie
+    if (backButton) backButton.style.display = "none";
+    if (form) form.style.display = "none"; // Cacher le formulaire
+    if (galleryText) galleryText.textContent = "Galerie photo"; //remettre txt galerie photo
+    if (addProjectBtn) {
+        addProjectBtn.value = "Ajouter une photo"; //remettre btn ajouter photo qd retour
+        addProjectBtn.classList.remove("btn-valider");
+        addProjectBtn.style.backgroundColor = ""; //remettre couleur background de base
+    }
+
+});
+
+document.getElementById("addProject").addEventListener("click", function() {
+    document.getElementById("back").style.display = "block";
+});  
+
+//ajouter photo en cliquant sur le btn avec input caché
+const fileInput = document.getElementById("imageUpload");
+const uploadBtn = document.getElementById("customBtn");
+const fileNameDisplay = document.getElementById("fileName");
+
+    // qd click, on déclanche l'input caché
+    uploadBtn.addEventListener("click", () => {
+        fileInput.click();
+    });
+
+
+//fonction form data pour envoyer le formulaire
+
+document.getElementById("addProject").addEventListener("click", async function(e){
+    e.preventDefault();
+
+    const fileInput = document.getElementById("imageUpload");
+    const file = fileInput.files[0];
+
+    // Vérif type de fichier
+    const allowedTypes = ["image/jpeg", "image/png"];
+    if (!allowedTypes.includes(file.type)) {
+        alert("Seul les formats jpg ou png sont autorisés");
+        return;
+    }
+
+    // Vérif taille du fichier 
+    if (file.size > 4 * 1024 * 1024) { 
+        alert("La taille de l'image ne doit pas dépasser 4mo");
+        return;
+    }
+
+    const form = document.getElementById('addNewProject');
+    const saveProject = new FormData(form);
+
+    try{
+    const token = localStorage.getItem('token');
+
+    if (!token){
+        console.log ("Erreur, vous devez être connecté pour ajouter un projet.");
+        return
+    }
+    console.log("token récupéré:",token);
+
+    let response = await fetch ('http://localhost:5678/api/works', {
+       method : 'POST',
+       headers: {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        },
+        body : saveProject,
+    });
+
+    if (!response.ok){
+        throw new Error (`Erreur ${response.status} : ${response.statusText}`)
+    }
+
+    let result = await response.json();
+    alert(result.message);
+    } catch (error){
+        console.log ("Erreur lors de l'envoi des données :", error);
+    }
+});
+     
