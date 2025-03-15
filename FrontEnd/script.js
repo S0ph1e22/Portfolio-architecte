@@ -533,6 +533,10 @@ document.getElementById("addProject").addEventListener("click", async function(e
     const form = document.getElementById('addNewProject');
     const saveProject = new FormData(form);
 
+    for (let [key, value] of saveProject.entries()) {
+        console.log(`${key}:`, value);
+    }    
+
     try{
     const token = localStorage.getItem('token');
 
@@ -540,15 +544,13 @@ document.getElementById("addProject").addEventListener("click", async function(e
         console.log ("Erreur, vous devez être connecté pour ajouter un projet.");
         return
     }
-    console.log("token récupéré:",token);
 
-    let response = await fetch ('http://localhost:5678/api/works', {
+    //envoie nouvel image
+    const response = await fetch ('http://localhost:5678/api/works', {
        method : 'POST',
-       headers: {
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
-        },
-        body : saveProject,
+       headers: {'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`},
+       body : saveProject,
     });
 
     if (!response.ok){
@@ -556,7 +558,7 @@ document.getElementById("addProject").addEventListener("click", async function(e
     }
 
     let result = await response.json();
-    alert(result.message);
+
     } catch (error){
         console.log ("Erreur lors de l'envoi des données :", error);
     }
