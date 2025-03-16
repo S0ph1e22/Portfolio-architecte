@@ -346,7 +346,6 @@ const closeModal = function (e){
 
     //remettre background en blanc
     document.querySelector(".modal-overlay").style.display = "none";
-    form.style.display = "none";
 
     
     modal.removeEventListener ('click', closeModal);
@@ -571,9 +570,19 @@ document.getElementById("addProject").addEventListener("click", async function(e
             newImage.src = result.imageUrl; 
             newImage.alt = result.title; 
        
-            const gallery = document.querySelector('.gallery'); 
-            gallery.appendChild(newImage); 
+            //création balise figcaption
+            const figcaption = document.createElement('figcaption');
+            figcaption.textContent = result.title;
+            
+            //creation balise figure pour titre
+            const figure = document.createElement('figure');
+            figure.appendChild(newImage);
+            figure.appendChild(figcaption);
 
+            //ajout figure dans gallery
+            const gallery = document.querySelector('.gallery'); 
+            gallery.appendChild(figure); 
+           
             //ajout image modal
             const modalGallery = document.querySelector('.modal-gallery');
             if (modalGallery) {
