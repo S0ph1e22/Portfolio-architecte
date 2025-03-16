@@ -566,13 +566,26 @@ document.getElementById("addProject").addEventListener("click", async function(e
         
         if (result && result.imageUrl) {
            
+            //ajout image gallery
             const newImage = document.createElement('img');
             newImage.src = result.imageUrl; 
             newImage.alt = result.title; 
        
             const gallery = document.querySelector('.gallery'); 
             gallery.appendChild(newImage); 
-    
+
+            //ajout image modal
+            const modalGallery = document.querySelector('.modal-gallery');
+            if (modalGallery) {
+                const modalImage = document.createElement('img');
+                modalImage.src = result.imageUrl;
+                modalImage.alt = result.title;
+                modalGallery.appendChild(modalImage);
+            }
+
+            // Fermer modal après ajout
+            closeModal(e);
+
         } else {
             console.log("Pas d'url trouvée");
         }
@@ -580,4 +593,10 @@ document.getElementById("addProject").addEventListener("click", async function(e
     } catch (error) {
         console.log("Erreur lors de l'envoi des données :", error);
     }
+});
+
+//rouvrir la modal sans refresh la page
+document.getElementById("openModalButton").addEventListener("click", function (e) {
+    openModal(e);
+    console.log("Modal rouverte");
 });
