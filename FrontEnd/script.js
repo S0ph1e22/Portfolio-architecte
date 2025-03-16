@@ -546,21 +546,38 @@ document.getElementById("addProject").addEventListener("click", async function(e
     }
 
     //envoie nouvel image
-    const response = await fetch ('http://localhost:5678/api/works', {
-       method : 'POST',
-       headers: {'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`},
-       body : saveProject,
-    });
 
-    if (!response.ok){
-        throw new Error (`Erreur ${response.status} : ${response.statusText}`)
-    }
-
-    let result = await response.json();
-
-    } catch (error){
-        console.log ("Erreur lors de l'envoi des données :", error);
+        const response = await fetch('http://localhost:5678/api/works', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+            body: saveProject, 
+        });
+    
+        if (!response.ok) {
+            throw new Error(`Erreur ${response.status} : ${response.statusText}`);
+        }
+    
+        let result = await response.json();
+        console.log(result); 
+    
+        
+        if (result && result.imageUrl) {
+           
+            const newImage = document.createElement('img');
+            newImage.src = result.imageUrl; 
+            newImage.alt = result.title; 
+       
+            const gallery = document.querySelector('.gallery'); 
+            gallery.appendChild(newImage); 
+    
+        } else {
+            console.log("Pas d'url trouvée");
+        }
+    
+    } catch (error) {
+        console.log("Erreur lors de l'envoi des données :", error);
     }
 });
-     
