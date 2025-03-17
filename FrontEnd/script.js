@@ -417,7 +417,7 @@ async function deleteProject(projectId, imgElement) {
         console.log(response);
 
         const responseText = await response.text();
-        console.log("Statut HTTP :", response.status);
+        console.log("Statut HTTP :", response.status); //(erreur 204 : projet deleted)
 
         if (!response.ok) {
             throw new Error(`Erreur lors de la suppression du projet: ${response.status}`);
@@ -549,8 +549,8 @@ document.getElementById("addProject").addEventListener("click", async function(e
         return;
     }
 
-    if (!categoryUpload.value.trim()){
-        alert ("Veuillez choisir une catégorie");
+    if (categoryUpload.value === "0") {
+        alert("Veuillez choisir une catégorie");
         return;
     }
 
