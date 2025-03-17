@@ -346,6 +346,7 @@ const closeModal = function (e){
 
     //remettre background en blanc
     document.querySelector(".modal-overlay").style.display = "none";
+    form.style.display = "none";
 
     
     modal.removeEventListener ('click', closeModal);
@@ -452,7 +453,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 //fct click sur le btn ajouter une photo
 document.getElementById("addProject").addEventListener("click", function(event){
     event.preventDefault();
-    console.log("btn ajout projet cliqué");
 
      //selectionner gallery et form
     const galleryText = document.querySelector(".modal-wrapper > p");
@@ -516,6 +516,11 @@ document.getElementById("addProject").addEventListener("click", async function(e
     const fileInput = document.getElementById("imageUpload");
     const file = fileInput.files[0];
 
+    if (!file){
+        alert ("Veuillez choisir un fichier à ajouter");
+        return;
+    }
+
     // Vérif type de fichier
     const allowedTypes = ["image/jpeg", "image/png"];
     if (!allowedTypes.includes(file.type)) {
@@ -526,6 +531,20 @@ document.getElementById("addProject").addEventListener("click", async function(e
     // Vérif taille du fichier 
     if (file.size > 4 * 1024 * 1024) { 
         alert("La taille de l'image ne doit pas dépasser 4mo");
+        return;
+    }
+
+    //si titre et cat sont vides -> message d'erreur
+    const titleUpload = document.getElementById("titleUpload");
+    const categoryUpload = document.getElementById("categoryUpload");
+
+    if (!titleUpload.value.trim()){
+        alert("Veuillez donner un titre à votre projet");
+        return;
+    }
+
+    if (!categoryUpload.value.trim()){
+        alert ("Veuillez choisir une catégorie");
         return;
     }
 
@@ -545,7 +564,6 @@ document.getElementById("addProject").addEventListener("click", async function(e
     }
 
     //envoie nouvel image
-
         const response = await fetch('http://localhost:5678/api/works', {
             method: 'POST',
             headers: {
@@ -604,8 +622,21 @@ document.getElementById("addProject").addEventListener("click", async function(e
     }
 });
 
+//remettre la modal a 0 après ajout projet
+function resetModal(){
+    const titleUpload = document.getElementById("titleUpload");
+    const categoryUpload = document.getElementById ("categoryUpload");
+    const fileInput = document.getElementById("imageUpload");
+
+    titleUpload.value = "";
+    categoryUpload.selectedIndex = 0;
+    fileInput.value= "";
+}
+
 //rouvrir la modal sans refresh la page
 document.getElementById("openModalButton").addEventListener("click", function (e) {
-    openModal(e);
-    console.log("Modal rouverte");
+    const modal = document.getElementById("modifier");
+    modal.style.display = "block";  
+    resetModal();
+    console.log("Modal ouverte");
 });
