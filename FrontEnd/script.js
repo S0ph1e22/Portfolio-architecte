@@ -185,6 +185,12 @@ document.addEventListener("DOMContentLoaded", function () {
         let header = document.querySelector("header");
         header.appendChild(nouvelleDiv);
             console.log("mode édition");
+
+        //cache les btn filtre
+        let categoriesDiv = document.querySelector('.categories');
+        if (categoriesDiv) {
+            categoriesDiv.style.display = "none";
+        }
     }
 });
 
