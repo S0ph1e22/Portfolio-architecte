@@ -46,18 +46,19 @@
 				<hr>
 				<input type="submit" id="addProject"value=" Ajouter une photo">
 				<button id="back"><i class="fa-solid fa-arrow-left"></i></button>
-				<form id="addNewProject">
+				<form method="POST" id="addNewProject">
 					<div class="ajoutImage">
 						<i class="btn-image fa-regular fa-image fa-4x"></i>
 						<input type="file" name="image" id="imageUpload" accept="image/jpeg, image/png" style="display: none;" required>
 						<button type="button" id="customBtn">+ Ajouter photo </button>
 						<p id="formatImage"> jpg, png : 4mo max </p>
+						<img id="imagePreview" style="display: none" alt="Aperçu de l'image">
 					</div>
 					<label for="title" id="title"> Titre </label>
 					<input type="text" name="title" id="titleUpload" required>
 					<label for="text" id="categorie"> Catégorie</label>
 					<select name="category" id="categoryUpload">
-						<option value="0"> choisir une catégorie</option>
+						<option value="0"></option>
 						<option value="1"> Objet</option>
 						<option value="2"> Appartement</option>
 						<option value="3"> Hotel & restaurant</option>

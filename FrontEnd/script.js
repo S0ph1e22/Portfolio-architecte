@@ -453,7 +453,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     if (gallery) gallery.style.display = "grid";  // Afficher la galerie 
     if (backButton) backButton.style.display = "none"; //cacher btn retour
     if (form) form.style.display = "none"; // Cacher le formulaire 
-    if (galleryText) galleryText.textContent = "Galerie photo"; //affiche txt
+    if (galleryText) galleryText.textContent = "Galerie photo"; //affiche txt    
 });  
 
 //fct click sur le btn ajouter une photo
@@ -465,11 +465,13 @@ document.getElementById("addProject").addEventListener("click", function(event){
     const gallery = document.querySelector(".gallery-modal");
     const form = document.getElementById("addNewProject");
     const addProjectBtn = document.getElementById("addProject");
+    const modalWrapper = document.querySelector(".modal-wrapper");
 
   
   if (gallery) gallery.style.display = "none"; //masquer gallery
   if (form)form.style.display = "block"; //afficher form
   if (galleryText) galleryText.textContent = "Ajout photo"; //changer le titre
+  if (modalWrapper) modalWrapper.querySelectorAll('.delete-project').forEach(btn => btn.style.display = "none");
   if (addProjectBtn){ 
     addProjectBtn.value = "valider"; //changer txt du btn
     addProjectBtn.classList.add("btn-valider");
@@ -501,6 +503,9 @@ document.getElementById("back").addEventListener("click", function(){
 
 document.getElementById("addProject").addEventListener("click", function() {
     document.getElementById("back").style.display = "block";
+    document.querySelectorAll(".gallery-modal .delete-project").forEach((btn) => {
+        btn.style.display = "block";
+    });
 });  
 
 //ajouter photo en cliquant sur le btn avec input caché
@@ -513,9 +518,33 @@ const fileNameDisplay = document.getElementById("fileName");
         fileInput.click();
     });
 
+//afficher preview image
+fileInput.addEventListener("change", (event) => {
+    const file = event.target.files[0];
+    
+    if (file) {
+
+    const reader = new FileReader();
+        reader.onload = function(e) {
+            imagePreview.src = e.target.result;
+            imagePreview.style.display = "block"; // afficher aperçu de l'image
+            uploadBtn.style.display = "none"; // cacher bouton ajouter photo
+            document.querySelector(".btn-image").style.display = "none"; // cacher icone image
+            document.getElementById("formatImage").style.display = "none"; //cacher txt format image
+            const modalWrapper = document.querySelector(".modal-wrapper"); //cacher btn poubelle
+            if (modalWrapper) {
+                const deleteBtns = modalWrapper.querySelectorAll('.delete-project');
+                deleteBtns.forEach(btn => {
+                    btn.style.display = "none";
+                });
+            }            
+        };
+
+        reader.readAsDataURL(file);
+    }
+});
 
 //fonction form data pour envoyer le formulaire
-
 document.getElementById("addProject").addEventListener("click", async function(e){
     e.preventDefault();
 

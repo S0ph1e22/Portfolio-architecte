@@ -536,13 +536,13 @@ i.btn-image{
 	position: absolute;
 	left: 50%; 
     transform: translateX(-50%); 
-	top: 115px;
+	top: 20px;
 	color: rgba(185, 197, 204, 1);
 }
 
 p#formatImage{
 	font-size: 10px;
-	top: 240px;
+	top: 135px;
 }
 
 #customBtn{
@@ -553,9 +553,16 @@ p#formatImage{
 	background-color: rgba(203, 214, 220, 1);
 	font-size: 14px;
 	border: none;
-	top: 190px;
+	top: 90px;
 	width: 173px;
 	height: 36px;
 	color: rgba(48, 102, 133, 1);
 }
 
+#imagePreview{
+	max-width: 100%;
+	max-height: 169px;
+	position: absolute;
+	left: 50%; 
+    transform: translateX(-50%); 
+}
