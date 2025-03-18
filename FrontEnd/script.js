@@ -189,7 +189,7 @@ document.addEventListener("DOMContentLoaded", function () {
         //cache les btn filtre
         let categoriesDiv = document.querySelector('.categories');
         if (categoriesDiv) {
-            categoriesDiv.style.display = "none";
+            categoriesDiv.style.visibility= "hidden";
         }
     }
 });
@@ -290,6 +290,7 @@ let focusables = []
 
 const openModal = function(e){
     e.preventDefault();
+    resetModal();
     modal = document.querySelector (e.target.getAttribute ('href'));
     focusables = Array.from(modal.querySelectorAll(focusableSelector));
     modal.style.display = null;
@@ -666,6 +667,13 @@ function resetModal(){
     titleUpload.value = "";
     categoryUpload.selectedIndex = 0;
     fileInput.value= "";
+    if (imagePreview) {
+        imagePreview.style.display = "none";
+        imagePreview.src = "";
+        document.querySelector(".btn-image").style.display = "block";
+        document.getElementById("formatImage").style.display = "block";
+        uploadBtn.style.display = "block";
+    }
 }
 
 //rouvrir la modal sans refresh la page
