@@ -663,23 +663,19 @@ function resetModal(){
     const titleUpload = document.getElementById("titleUpload");
     const categoryUpload = document.getElementById ("categoryUpload");
     const fileInput = document.getElementById("imageUpload");
+    const gallery = document.querySelector(".gallery-modal");
+    const form = document.getElementById("addNewProject");
 
     titleUpload.value = "";
     categoryUpload.selectedIndex = 0;
     fileInput.value= "";
+    if (gallery) gallery.style.display = "grid";
+    if (form) form.style.display = "none";
     if (imagePreview) {
         imagePreview.style.display = "none";
         imagePreview.src = "";
         document.querySelector(".btn-image").style.display = "block";
         document.getElementById("formatImage").style.display = "block";
-        uploadBtn.style.display = "block";
+        uploadBtn.style.display = "block";  
     }
 }
-
-//rouvrir la modal sans refresh la page
-document.getElementById("openModalButton").addEventListener("click", function (e) {
-    const modal = document.getElementById("modifier");
-    modal.style.display = "block";  
-    resetModal();
-    console.log("Modal ouverte");
-});
