@@ -549,12 +549,12 @@ fileInput.addEventListener("change", (event) => {
 document.getElementById("addProject").addEventListener("click", async function(e){
     e.preventDefault();
 
-    const fileInput = document.getElementById("imageUpload");
-    const file = fileInput.files[0];
+    const imageUpload = document.getElementById("imageUpload");
+    const file = imageUpload.files[0]; // Vérifie si un fichier a été sélectionné
 
-    if (!file){
-        alert ("Veuillez choisir un fichier à ajouter");
-        return;
+    if (!file) {
+        alert("Veuillez choisir un fichier à ajouter");
+        return; // Si le fichier est vide, on arrête la fonction ici
     }
 
     // Vérif type de fichier
@@ -638,12 +638,10 @@ document.getElementById("addProject").addEventListener("click", async function(e
             gallery.appendChild(figure); 
            
             //ajout image modal
-            const modalGallery = document.querySelector('.modal-gallery');
+            const modalGallery = document.querySelector('.gallery-modal');
             if (modalGallery) {
-                const modalImage = document.createElement('img');
-                modalImage.src = result.imageUrl;
-                modalImage.alt = result.title;
-                modalGallery.appendChild(modalImage);
+                const modalFigure = figure.cloneNode(true);
+                modalGallery.appendChild(modalFigure);
             }
 
             // Fermer modal après ajout
@@ -665,17 +663,33 @@ function resetModal(){
     const fileInput = document.getElementById("imageUpload");
     const gallery = document.querySelector(".gallery-modal");
     const form = document.getElementById("addNewProject");
+    const imagePreview = document.getElementById("imagePreview");
+    const addProjectBtn = document.getElementById("addProject");
+    const backButton = document.getElementById("back");
+    const galleryText = document.querySelector(".modal-wrapper > p");
 
     titleUpload.value = "";
     categoryUpload.selectedIndex = 0;
     fileInput.value= "";
+
     if (gallery) gallery.style.display = "grid";
+    if (backButton) backButton.style.display = "none";
+    if (form) form.style.display = "none"; // Cacher le formulaire
+    if (galleryText) galleryText.textContent = "Galerie photo"; //remettre txt galerie photo
+    if (addProjectBtn) {
+        addProjectBtn.value = "Ajouter une photo"; //remettre btn ajouter photo qd retour
+        addProjectBtn.classList.remove("btn-valider");
+        addProjectBtn.style.backgroundColor = ""; //remettre couleur background de base
+    }
     if (form) form.style.display = "none";
+
+
     if (imagePreview) {
         imagePreview.style.display = "none";
         imagePreview.src = "";
         document.querySelector(".btn-image").style.display = "block";
         document.getElementById("formatImage").style.display = "block";
-        uploadBtn.style.display = "block";  
+        const uploadBtn = document.getElementById("uploadBtn");
+        if (uploadBtn) uploadBtn.style.display = "block";  
     }
 }
