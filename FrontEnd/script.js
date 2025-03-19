@@ -119,6 +119,22 @@ function loadLoginForm() {
         });
 }
 
+//avoir le btn login en gras
+document.addEventListener("DOMContentLoaded", function() {
+    const loginBtn = document.getElementById("loginBtn");
+
+    // mutation observer ecoute changement du dom, il détecte qd page login est ajouté
+    const observer = new MutationObserver(() => {
+        const loginSection = document.getElementById("page-login");
+        if (loginSection) {
+            loginBtn.style.fontWeight = "bold"; // Mettre en gras btn login si page-login est présent
+            observer.disconnect(); // Arrêt observer 
+        }
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+});
+
 //login
 function login() {
 

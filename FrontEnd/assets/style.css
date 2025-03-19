@@ -232,7 +232,6 @@ figcaption {
 }
 
 /*page login*/
-
 #page-login {
     display: flex; 
     justify-content: center; 
@@ -566,3 +565,4 @@ p#formatImage{
 	left: 50%; 
     transform: translateX(-50%); 
 }
+
