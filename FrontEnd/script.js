@@ -27,28 +27,6 @@ async function fetchProjects() {
     }
 }
 
-// Récupérer les catégories et afficher les boutons
-async function fetchCategories() {
-    try {
-        const response = await fetch("http://localhost:5678/api/categories");
-        if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
-
-        const categories = await response.json();
-        console.log("Catégories récupérées :", categories);
-
-        let html = '<button class="btn-tous" name="Tous">Tous</button>'; 
-
-        categories.forEach(category => {
-            html += `<button class="btn-category" name="${category.id}">${category.name}</button>`;
-        });
-
-        document.querySelector('.categories').innerHTML = html;
-
-    } catch (error) {
-        console.error("Erreur lors de la récupération des catégories :", error);
-    }
-}
-
 //recupere les projets en fonction de l'ID de la category
 async function fetchProjectsByCategory(categoryId) {
     try {
@@ -301,14 +279,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 //ouvrir la modal avec btn modifier
 let modal = null
-const focusableSelector = "button, a, input, textarea"
+const focusableSelector = "button, a, input, textarea, select"
 let focusables = []
 
 const openModal = function(e){
     e.preventDefault();
     resetModal();
     modal = document.querySelector (e.target.getAttribute ('href'));
-    focusables = Array.from(modal.querySelectorAll(focusableSelector));
     modal.style.display = null;
     modal.removeAttribute ('aria-hidden');
     modal.setAttribute ('aria-modal', 'true');
@@ -384,35 +361,10 @@ const closeModal = function (e){
 
 };
 
-//empeche que qd on clique a l'intérieur le modal se ferme
+//empeche que qd on clique a l'intérieur le modal se ferme 
 const stopPropagation = function (e){
     e.stopPropagation();
 };
-
-const focusInModal = function (e){
-    e.preventDefault();
-
-    let index = focusables.findIndex( f => f === modal.querySelector(':focus'));
-    index++;
-    if (index >= focusables.length){
-        index=0;
-    }
-    focusables[index].focus();
-};
-
-document.querySelectorAll('.js-modal').forEach (a =>{
-    a.addEventListener ('click', openModal);
-});
-
-window.addEventListener ('keydown', function(e){
-    if (e.key === "Escape" || e.key === 'Esc'){
-        closeModal(e);
-    }
-    if (e.key=== 'Tab' && modal !== null){
-        focusInModal (e);
-    }
-});
-
 
 // Fonction pour supprimer un projet
 async function deleteProject(projectId, imgElement) {
@@ -458,7 +410,6 @@ async function deleteProject(projectId, imgElement) {
 }
 
 //ajouter un projet
-
 document.addEventListener("DOMContentLoaded", function(event) {
     event.preventDefault();
    
@@ -561,6 +512,61 @@ fileInput.addEventListener("change", (event) => {
         reader.readAsDataURL(file);
     }
 });
+
+//récup catégories dynamiquement + récup cat et afficher les btn de fitrage
+async function fetchCategories() {
+    try {
+        //mm fonction que pour les btn filtres
+        const response = await fetch("http://localhost:5678/api/categories");
+        if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
+        const categories = await response.json();
+        console.log("Catégories récupérées pour la modal:", categories);
+
+        // selectionne element select avec id de catUpload
+        const categorySelect = document.querySelector('#categoryUpload');
+        
+        // vide les select pour pas les afficher plusieurs fois
+        categorySelect.innerHTML = '';
+
+        // ajout option vide
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '0';
+        defaultOption.textContent = '';
+        categorySelect.appendChild(defaultOption);
+
+        // creer une option pour chaque cat récup + l'ajouter au select
+        categories.forEach(category => {
+            const option = document.createElement('option');
+            option.value = category.id; 
+            option.textContent = category.name;
+            categorySelect.appendChild(option);
+        });
+    
+        //les cat pour les btn de filtrage
+        let html = '<button class="btn-tous" name="Tous">Tous</button>'; 
+
+        categories.forEach(category => {
+            html += `<button class="btn-category" name="${category.id}">${category.name}</button>`;
+        });
+
+        document.querySelector('.categories').innerHTML = html;
+
+    } catch (error) {
+        console.error("Erreur lors de la récupération des catégories :", error);
+    }
+}
+
+
+// Appeler la fonction pour récupérer et insérer les catégories au moment du chargement de la page
+document.addEventListener('DOMContentLoaded', function() {
+    fetchCategories();
+});
+
+// Appeler la fonction pour récupérer et insérer les catégories au moment du chargement de la page
+document.addEventListener('DOMContentLoaded', function() {
+    fetchCategories();
+});
+
 
 //fonction form data pour envoyer le formulaire
 document.getElementById("addProject").addEventListener("click", async function(e){
