@@ -375,6 +375,7 @@ const stopPropagation = function (e){
 
 const focusInModal = function (e){
     e.preventDefault();
+
     let index = focusables.findIndex( f => f === modal.querySelector(':focus'));
     index++;
     if (index >= focusables.length){
@@ -426,7 +427,7 @@ async function deleteProject(projectId, imgElement) {
 
         // Supprimer l'image du modal
         imgElement.parentElement.remove(); //supp img + icone
-        console.log(`Le projet ${projectId} a bien été supprimé`);
+        console.log(`Le projet ${projectId} a bien été supprimé de la modal`);
      } catch (error) {
         console.error("Erreur lors de la suppression du projet :", error);
     }
@@ -623,6 +624,7 @@ document.getElementById("addProject").addEventListener("click", async function(e
             const newImage = document.createElement('img');
             newImage.src = result.imageUrl; 
             newImage.alt = result.title; 
+            newImage.dataset.id = result.id; //ajoput id a image
        
             //création balise figcaption
             const figcaption = document.createElement('figcaption');
@@ -644,6 +646,8 @@ document.getElementById("addProject").addEventListener("click", async function(e
                 modalGallery.appendChild(modalFigure);
             }
 
+            //ajopute btn de suppression a img
+            addDeleteButton();
             // Fermer modal après ajout
             closeModal(e);
 
@@ -678,11 +682,8 @@ function resetModal(){
     if (galleryText) galleryText.textContent = "Galerie photo"; //remettre txt galerie photo
     if (addProjectBtn) {
         addProjectBtn.value = "Ajouter une photo"; //remettre btn ajouter photo qd retour
-        addProjectBtn.classList.remove("btn-valider");
-        addProjectBtn.style.backgroundColor = ""; //remettre couleur background de base
-    }
-    if (form) form.style.display = "none";
-
+        addProjectBtn.classList.remove("btn-valider"); //supp btn valider
+    }       
 
     if (imagePreview) {
         imagePreview.style.display = "none";
@@ -692,4 +693,29 @@ function resetModal(){
         const uploadBtn = document.getElementById("uploadBtn");
         if (uploadBtn) uploadBtn.style.display = "block";  
     }
+    addDeleteButton();
+}
+
+//recup btn delete car créer avec le dom donc pas dispo
+function addDeleteButton(){
+    const imagesInModal = document.querySelectorAll('.gallery-modal img'); // sélectionne images du modal
+    imagesInModal.forEach(img => {
+        const deleteBtn = document.createElement('button');
+        deleteBtn.classList.add('delete-project');
+        deleteBtn.innerHTML = `<i class="btn-delete fa-regular fa-trash-can fa-xs" aria-hidden="true"></i>`;
+
+        img.parentElement.style.position = "relative";
+        img.parentElement.appendChild(deleteBtn);
+
+        //ajout evenement click pour supp
+        deleteBtn.addEventListener('click', function () {
+            const projectId = img.dataset.id; 
+            if (projectId) {
+                deleteProject(projectId, img);  // Appel de deleteProject avec ID du projet
+            } else {
+                console.error("ID du projet non trouvé.");
+            }
+        });
+        
+    });
 }
