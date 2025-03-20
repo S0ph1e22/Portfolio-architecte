@@ -605,7 +605,7 @@ document.getElementById("addProject").addEventListener("click", async function(e
     if (categoryUpload.value === "0") {
         alert("Veuillez choisir une catégorie");
         return;
-    }
+    }    
 
     const form = document.getElementById('addNewProject');
     const saveProject = new FormData(form);
@@ -682,6 +682,27 @@ document.getElementById("addProject").addEventListener("click", async function(e
     }
 });
 
+//mettre btn valider en vert si tout les champ sont remplis
+document.getElementById("imageUpload").addEventListener("change", updateBtn);
+document.getElementById("titleUpload").addEventListener("input", updateBtn);
+document.getElementById("categoryUpload").addEventListener("change", updateBtn);
+
+function updateBtn() {
+    const file = document.getElementById("imageUpload").files[0]; //détecte si img sélectionner
+    const titleUpload = document.getElementById("titleUpload").value.trim(); //detecte si titre rempli
+    const categoryUpload = document.getElementById("categoryUpload").value; //détecte si cat chooisie
+    const addProjectBtn = document.getElementById("addProject");
+
+    //si tout les champs sont rempli, mettre btn en vert, si non, en gris
+    if (file && titleUpload && categoryUpload !== "0") {
+        addProjectBtn.style.backgroundColor = "rgba(29, 97, 84, 1)"; //mettre background en vert
+        addProjectBtn.disabled = false;
+    } else {
+        addProjectBtn.style.backgroundColor = "gray"; // remettre en gris
+        addProjectBtn.disabled = true;
+    }
+}
+
 //remettre la modal a 0 après ajout projet
 function resetModal(){
     const titleUpload = document.getElementById("titleUpload");
@@ -693,18 +714,21 @@ function resetModal(){
     const addProjectBtn = document.getElementById("addProject");
     const backButton = document.getElementById("back");
     const galleryText = document.querySelector(".modal-wrapper > p");
+    const customBtn = document.getElementById("customBtn");
 
     titleUpload.value = "";
     categoryUpload.selectedIndex = 0;
     fileInput.value= "";
 
     if (gallery) gallery.style.display = "grid";
-    if (backButton) backButton.style.display = "none";
+    if (customBtn) customBtn.style.display = "block"
+    if (backButton) backButton.style.display = "none"; //remet btn pour ajouter un fichier
     if (form) form.style.display = "none"; // Cacher le formulaire
     if (galleryText) galleryText.textContent = "Galerie photo"; //remettre txt galerie photo
     if (addProjectBtn) {
         addProjectBtn.value = "Ajouter une photo"; //remettre btn ajouter photo qd retour
         addProjectBtn.classList.remove("btn-valider"); //supp btn valider
+        addProjectBtn.style.backgroundColor ="rgba(29, 97, 84, 1)";//background btn ajouter photo
     }       
 
     if (imagePreview) {
