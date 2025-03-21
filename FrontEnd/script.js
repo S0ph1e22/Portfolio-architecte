@@ -1,3 +1,23 @@
+const gallery = document.querySelector(".gallery"); //grd gallery
+const loginBtn = document.getElementById("loginBtn"); //btn login
+const loginSection = document.getElementById("page-login"); //page login avec formulaire
+const errorMessage = document.getElementById('errorMessage'); //message d'erreur si champs du form incorrect
+const modalWrapper = document.querySelector(".modal-wrapper" ); //la modal
+const imagesInModal = modalWrapper.querySelectorAll('img'); //img du modal
+const deleteBtn = document.createElement('button'); //btn supp img modal
+const valideProjectBtn = document.getElementById("btn-valide-project"); //btn valider projet
+const galleryText = document.querySelector(".modal-wrapper > p"); //remettre le titre de la gallery modal
+const form = document.getElementById("addNewProject"); //formulaire pour ajouter projet
+const backButton = document.getElementById("back"); //fleche retour
+const addProjectBtn = document.getElementById("addProject"); //btn ajouter une photo modal
+const categorySelect = document.querySelector('#categoryUpload'); //élément select pour choisir les catégories
+const titleUpload = document.getElementById("titleUpload"); //champ pour écrire un titre
+const categoryUpload = document.getElementById ("categoryUpload"); //choisir une categorie
+const imagePreview = document.getElementById("imagePreview"); //preview de l'img
+const imageUpload = document.getElementById("imageUpload"); //btn pour choisir un fichier a ajouter
+
+// PAGE GALLERIE
+
 // Récupérer les projets et les afficher
 async function fetchProjects() {
     try {
@@ -6,8 +26,7 @@ async function fetchProjects() {
 
         const projects = await response.json();
         console.log("Données récupérées :", projects);
-
-        const gallery = document.querySelector(".gallery");
+        
         if (!gallery) {
             console.error("Élément .gallery non trouvé");
             return;
@@ -36,15 +55,12 @@ async function fetchProjectsByCategory(categoryId) {
         const projects = await response.json();
         console.log("Données récupérées par categorie :", projects);
 
-        const gallery = document.querySelector(".gallery");
         if (!gallery) {
             console.error("Élément .gallery non trouvé");
             return;
         }
 
         gallery.innerHTML = ""; //vide la galerie avant d'afficher les nouveaux projets
-
-       
         let filteredProjects;   //vérifie si categorieID existe
 
         if (categoryId) {
@@ -70,51 +86,36 @@ async function fetchProjectsByCategory(categoryId) {
     }
 }
 
-
-    document.querySelector(".categories").addEventListener("click", function(event) {
-        if (event.target.tagName === "BUTTON") {
-            const categoryID = event.target.name;
-            if (event.target.name !== "Tous"){
-                fetchProjectsByCategory(parseInt(categoryID));  //filtre projet avec id de la cat
-            }else{
-                fetchProjectsByCategory(null);      //affiche tous les projets !!
-            }
-            
+//filtrer les éléments par catégorie
+document.querySelector(".categories").addEventListener("click", function(event) {
+    if (event.target.tagName === "BUTTON") {
+        const categoryID = event.target.name;
+        if (event.target.name !== "Tous"){
+            fetchProjectsByCategory(parseInt(categoryID));  //filtre projet avec id de la cat
+        }else{
+            fetchProjectsByCategory(null);      //affiche tous les projets !!
         }
-    });
+        
+    }
+});
 
-
-//charger les projets   
+//charger le template de la page de login
 function loadLoginForm() {
     // Utiliser fetch pour charger le contenu du fichier login.html
     fetch('login.html')     //va chercher le fichier login.html
         .then(response => response.text())  // transforme les réponses que tu recois en texte
         .then(html => {
             mainContent.innerHTML = html;
+            loginBtn.style.fontWeight = "bold";
         })
         .catch(error => {
             console.error('Erreur lors du chargement du fichier login.html:', error);
         });
 }
 
-//avoir le btn login en gras
-document.addEventListener("DOMContentLoaded", function() {
-    const loginBtn = document.getElementById("loginBtn");
 
-    // mutation observer ecoute changement du dom, il détecte qd page login est ajouté
-    const observer = new MutationObserver(() => {
-        const loginSection = document.getElementById("page-login");
-        if (loginSection) {
-            loginBtn.style.fontWeight = "bold"; // Mettre en gras btn login si page-login est présent
-            observer.disconnect(); // Arrêt observer 
-        }
-    });
-
-    observer.observe(document.body, { childList: true, subtree: true });
-});
-
-//login
-function login() {
+//fonction pour se connecter 
+function login(){
 
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
@@ -155,87 +156,11 @@ function login() {
         });  
 }
 
-//ajout mode edition
-document.addEventListener("DOMContentLoaded", function () {
-    let token = localStorage.getItem("token");
-
-    if (token) {
-        console.log("affichage en cours");
-        
-        let nouvelleDiv = document.createElement("div");
-        nouvelleDiv.classList.add("modeEdition");
-
-        let nouvelIcone = document.createElement("i");
-        nouvelIcone.classList.add("fa-regular", "fa-pen-to-square");
-
-        let nouveauParagraphe = document.createElement("p");
-        nouveauParagraphe.textContent = "Mode édition";
-
-        // Ajout des éléments à la div
-        nouvelleDiv.appendChild(nouvelIcone);
-        nouvelleDiv.appendChild(nouveauParagraphe);
-
-        // Vérifie si <header> existe
-        let header = document.querySelector("header");
-        header.appendChild(nouvelleDiv);
-            console.log("mode édition");
-
-        //cache les btn filtre
-        let categoriesDiv = document.querySelector('.categories');
-        if (categoriesDiv) {
-            categoriesDiv.style.visibility= "hidden";
-        }
-    }
-});
-
-//ajout btn modifier ds section portfolio
-
-document.addEventListener("DOMContentLoaded", function(){
-    let token = localStorage.getItem('token');
-
-    if (token){
-        console.log ("affiche btn modifier");
-
-        let portfolioSection = document.querySelector("#portfolio");
-
-         if (portfolioSection) {
-            let modifierProjetDiv = document.querySelector(".modifierProjet");
-
-            if (!modifierProjetDiv) {
-               
-                modifierProjetDiv = document.createElement("div");
-                modifierProjetDiv.classList.add("modifierProjet");
-
-                let nouvelIcone = document.createElement('i');
-                nouvelIcone.classList.add("fa-regular", "fa-pen-to-square");
-
-                let nouveauLien = document.createElement("a");
-                nouveauLien.textContent = "modifier";
-                nouveauLien.href = "#modifier"; 
-                nouveauLien.classList.add("js-modal");
-              
-                modifierProjetDiv.appendChild(nouvelIcone);
-                modifierProjetDiv.appendChild(nouveauLien);
-
-                //insère div apres h2
-                let h2 = portfolioSection.querySelector("h2");
-                    h2.insertAdjacentElement("afterend", modifierProjetDiv);
-            }
-                console.log("Bouton Modifier ajouté");
-            }
-            document.querySelectorAll('.js-modal').forEach(a => {
-                a.addEventListener('click', openModal);
-            });
-    }
-});
-
 //deconnexion
 function logout(){
 
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
-
-    const loginBtn = document.getElementById('loginBtn');
     if (loginBtn){
         loginBtn.innerText = "Login";
         loginBtn.removeEventListener('click', logout);
@@ -245,37 +170,7 @@ function logout(){
    
 }
 
-document.addEventListener('DOMContentLoaded', async function() { 
-        const errorMessage = document.getElementById('errorMessage');
-        const loginBtn = document.getElementById('loginBtn');
-
-        if (errorMessage) {
-            errorMessage.style.display = "none";} //fait passer le dom(index.html) avant
-        
-        const token = localStorage.getItem('token');
-        if (token) {                                    //si connexion
-            loginBtn.innerText = "Logout";   //change login en logout
-            loginBtn.removeEventListener('click', loadLoginForm); 
-            loginBtn.addEventListener('click', logout);        
-        }else{
-            loginBtn.addEventListener('click', loadLoginForm); 
-        }
-        
-        await fetchCategories();   //att que les cat soit générer
-        await fetchProjects();     //att que les projets soit générer
-});
-
-//mettre fond gris + clique fond pour fermer la modal
-document.addEventListener("DOMContentLoaded", function () {
-    const modalOverlay = document.createElement("div");
-    modalOverlay.classList.add("modal-overlay");
-    document.body.appendChild(modalOverlay);
-
-    // Fermer la modal en cliquant sur l'overlay
-    modalOverlay.addEventListener("click", function () {
-        closeModal(new Event("click"));
-    });
-});
+//PAGE AVEC LA MODAL
 
 //ouvrir la modal avec btn modifier
 let modal = null
@@ -302,8 +197,6 @@ const openModal = function(e){
 
     //avoir la mini gallery
     fetchProjects().then(() => {
-        const gallery = document.querySelector(".gallery");
-        const modalWrapper = modal.querySelector(".modal-wrapper" );
         if (gallery && modalWrapper) {
                 const existingClone = modalWrapper.querySelector(".gallery-modal"); 
                 if (!existingClone) { 
@@ -311,35 +204,21 @@ const openModal = function(e){
                     galleryClone.classList.add("gallery-modal");
                     galleryClone.classList.remove("gallery");
                     modalWrapper.appendChild(galleryClone);
-
-                    //ajout icone poubelle
-                    const imagesInModal = modalWrapper.querySelectorAll('img');
-                    imagesInModal.forEach(img => {
-                        const deleteBtn = document.createElement('button');
-                        deleteBtn.classList.add('delete-project');
-                        deleteBtn.innerHTML = `<i class="btn-delete fa-regular fa-trash-can fa-xs" aria-hidden="true"></i>`;
-
-                        img.parentElement.style.position="relative";
-                        img.parentElement.appendChild(deleteBtn);
-
-                        //écoute pour supp le projet
-                        deleteBtn.addEventListener('click', function () {
-                            const projectId = img.id;  
-                            deleteProject(projectId, img);
-                        });
-    
-                        img.parentElement.appendChild(deleteBtn);
-                    });
+                    //ajout bouton supprimer
+                    addDeleteButton();
                 }
         }
     });
 };
 
 //fermer la modal
-const closeModal = function (e){
+const closeModal = function (){
+    const galleryClone = modal.querySelector (".gallery-modal"); //gallery du modal
     if (modal === null) return;
-
-    e.preventDefault();
+    if(valideProjectBtn){
+        valideProjectBtn.removeEventListener("click", sendForm);
+        valideProjectBtn.id = "btn-valide-project";
+    }
     modal.style.display = "none";
     modal.setAttribute ('aria-hidden', "true");
     modal.removeAttribute ('aria-modal');
@@ -348,23 +227,41 @@ const closeModal = function (e){
     document.querySelector(".modal-overlay").style.display = "none";
     form.style.display = "none";
 
-    
     modal.removeEventListener ('click', closeModal);
     modal.querySelector('.js-modal-close').removeEventListener('click', closeModal);
     modal.querySelector('.js-modal-stop') .removeEventListener('click', stopPropagation);
     
-    const galleryClone = modal.querySelector (".gallery-modal");
     if (galleryClone){
         galleryClone.remove();
     }
     modal = null;
-
 };
 
 //empeche que qd on clique a l'intérieur le modal se ferme 
 const stopPropagation = function (e){
     e.stopPropagation();
 };
+
+//btn retour
+document.getElementById("back").addEventListener("click", function(){
+    resetModal();
+ });
+
+ //affiche le formulaire 
+ document.getElementById("addProject").addEventListener("click", function(e) {
+    e.preventDefault();
+
+    //selectionner gallery et form
+   const gallery = document.querySelector(".gallery-modal");
+ 
+    if (gallery) gallery.style.display = "none"; //masquer gallery
+    if (form)form.style.display = "block"; //afficher form
+    if (galleryText) galleryText.textContent = "Ajout photo"; //changer le titre
+    if (modalWrapper) modalWrapper.querySelectorAll('.delete-project').forEach(btn => btn.remove());
+    addProjectBtn.style.display="none";
+
+    document.getElementById("back").style.display = "block";
+});
 
 // Fonction pour supprimer un projet
 async function deleteProject(projectId, imgElement) {
@@ -409,104 +306,24 @@ async function deleteProject(projectId, imgElement) {
         }
 }
 
-//ajouter un projet
-document.addEventListener("DOMContentLoaded", function(event) {
-    event.preventDefault();
-   
-    const galleryText = document.querySelector(".modal-wrapper > p");
-    const gallery = document.querySelector(".gallery-modal");
-    const form = document.getElementById("addNewProject");
-    const backButton = document.getElementById("back");
-   
-
-    if (gallery) gallery.style.display = "grid";  // Afficher la galerie 
-    if (backButton) backButton.style.display = "none"; //cacher btn retour
-    if (form) form.style.display = "none"; // Cacher le formulaire 
-    if (galleryText) galleryText.textContent = "Galerie photo"; //affiche txt    
-});  
-
-//fct click sur le btn ajouter une photo
-document.getElementById("addProject").addEventListener("click", function(event){
-    event.preventDefault();
-
-     //selectionner gallery et form
-    const galleryText = document.querySelector(".modal-wrapper > p");
-    const gallery = document.querySelector(".gallery-modal");
-    const form = document.getElementById("addNewProject");
-    const addProjectBtn = document.getElementById("addProject");
-    const modalWrapper = document.querySelector(".modal-wrapper");
-
-  
-  if (gallery) gallery.style.display = "none"; //masquer gallery
-  if (form)form.style.display = "block"; //afficher form
-  if (galleryText) galleryText.textContent = "Ajout photo"; //changer le titre
-  if (modalWrapper) modalWrapper.querySelectorAll('.delete-project').forEach(btn => btn.style.display = "none");
-  if (addProjectBtn){ 
-    addProjectBtn.value = "valider"; //changer txt du btn
-    addProjectBtn.classList.add("btn-valider");
-    addProjectBtn.style.backgroundColor = "rgba(167, 167, 167, 1)"; //couleur background btn valider
-    addProjectBtn.style.border="none";
-    }
-});
-
-
-document.getElementById("back").addEventListener("click", function(){
-    const galleryText = document.querySelector(".modal-wrapper > p");
-    const gallery = document.querySelector(".gallery-modal");
-    const form = document.getElementById("addNewProject");
-    const addProjectBtn = document.getElementById("addProject");
-    const backButton = document.getElementById("back");
-
-
-    if (gallery) gallery.style.display = "grid"; // Réafficher la galerie
-    if (backButton) backButton.style.display = "none";
-    if (form) form.style.display = "none"; // Cacher le formulaire
-    if (galleryText) galleryText.textContent = "Galerie photo"; //remettre txt galerie photo
-    if (addProjectBtn) {
-        addProjectBtn.value = "Ajouter une photo"; //remettre btn ajouter photo qd retour
-        addProjectBtn.classList.remove("btn-valider");
-        addProjectBtn.style.backgroundColor = ""; //remettre couleur background de base
-    }
-
-});
-
-document.getElementById("addProject").addEventListener("click", function() {
-    document.getElementById("back").style.display = "block";
-    document.querySelectorAll(".gallery-modal .delete-project").forEach((btn) => {
-        btn.style.display = "block";
-    });
-});  
-
-//ajouter photo en cliquant sur le btn avec input caché
-const fileInput = document.getElementById("imageUpload");
-const uploadBtn = document.getElementById("customBtn");
-const fileNameDisplay = document.getElementById("fileName");
-
-    // qd click, on déclanche l'input caché
-    uploadBtn.addEventListener("click", () => {
-        fileInput.click();
-    });
-
 //afficher preview image
-fileInput.addEventListener("change", (event) => {
+imageUpload.addEventListener("change", (event) => {
     const file = event.target.files[0];
     
     if (file) {
-
     const reader = new FileReader();
         reader.onload = function(e) {
             imagePreview.src = e.target.result;
             imagePreview.style.display = "block"; // afficher aperçu de l'image
-            uploadBtn.style.display = "none"; // cacher bouton ajouter photo
+            imageUpload.style.display = "none"; // cacher bouton ajouter photo
             document.querySelector(".btn-image").style.display = "none"; // cacher icone image
             document.getElementById("formatImage").style.display = "none"; //cacher txt format image
-            const modalWrapper = document.querySelector(".modal-wrapper"); //cacher btn poubelle
             if (modalWrapper) {
                 const deleteBtns = modalWrapper.querySelectorAll('.delete-project');
                 deleteBtns.forEach(btn => {
                     btn.style.display = "none";
                 });
-            }            
+            }
         };
 
         reader.readAsDataURL(file);
@@ -521,16 +338,12 @@ async function fetchCategories() {
         if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
         const categories = await response.json();
         console.log("Catégories récupérées pour la modal:", categories);
-
-        // selectionne element select avec id de catUpload
-        const categorySelect = document.querySelector('#categoryUpload');
         
         // vide les select pour pas les afficher plusieurs fois
         categorySelect.innerHTML = '';
 
         // ajout option vide
         const defaultOption = document.createElement('option');
-        defaultOption.value = '0';
         defaultOption.textContent = '';
         categorySelect.appendChild(defaultOption);
 
@@ -557,34 +370,13 @@ async function fetchCategories() {
 }
 
 
-// Appeler la fonction pour récupérer et insérer les catégories au moment du chargement de la page
-document.addEventListener('DOMContentLoaded', function() {
-    fetchCategories();
-});
-
-// Appeler la fonction pour récupérer et insérer les catégories au moment du chargement de la page
-document.addEventListener('DOMContentLoaded', function() {
-    fetchCategories();
-});
-
-
 //fonction form data pour envoyer le formulaire
-document.getElementById("addProject").addEventListener("click", async function(e){
-    e.preventDefault();
-
-    const imageUpload = document.getElementById("imageUpload");
+function sendForm(){
     const file = imageUpload.files[0]; // Vérifie si un fichier a été sélectionné
 
     if (!file) {
         alert("Veuillez choisir un fichier à ajouter");
-        return; // Si le fichier est vide, on arrête la fonction ici
-    }
-
-    // Vérif type de fichier
-    const allowedTypes = ["image/jpeg", "image/png"];
-    if (!allowedTypes.includes(file.type)) {
-        alert("Seul les formats jpg ou png sont autorisés");
-        return;
+        return; 
     }
 
     // Vérif taille du fichier 
@@ -592,95 +384,26 @@ document.getElementById("addProject").addEventListener("click", async function(e
         alert("La taille de l'image ne doit pas dépasser 4mo");
         return;
     }
-
-    //si titre et cat sont vides -> message d'erreur
-    const titleUpload = document.getElementById("titleUpload");
-    const categoryUpload = document.getElementById("categoryUpload");
-
-    if (!titleUpload.value.trim()){
-        alert("Veuillez donner un titre à votre projet");
-        return;
-    }
-
-    if (categoryUpload.value === "0") {
-        alert("Veuillez choisir une catégorie");
-        return;
-    }    
-
-    const form = document.getElementById('addNewProject');
-    const saveProject = new FormData(form);
-
-    for (let [key, value] of saveProject.entries()) {
-        console.log(`${key}:`, value);
-    }    
-
+    
+    const saveProject = new FormData(form);  
     try{
-    const token = localStorage.getItem('token');
+        const token = localStorage.getItem('token');
 
-    if (!token){
-        console.log ("Erreur, vous devez être connecté pour ajouter un projet.");
-        return
-    }
-
-    //envoie nouvel image
-        const response = await fetch('http://localhost:5678/api/works', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            },
-            body: saveProject, 
-        });
-    
-        if (!response.ok) {
-            throw new Error(`Erreur ${response.status} : ${response.statusText}`);
+        if (!token){
+            console.log ("Erreur, vous devez être connecté pour ajouter un projet.");
+            return
         }
-    
-        let result = await response.json();
-        console.log(result); 
-    
-        
-        if (result && result.imageUrl) {
-           
-            //ajout image gallery
-            const newImage = document.createElement('img');
-            newImage.src = result.imageUrl; 
-            newImage.alt = result.title; 
-            newImage.dataset.id = result.id; //ajoput id a image
-       
-            //création balise figcaption
-            const figcaption = document.createElement('figcaption');
-            figcaption.textContent = result.title;
-            
-            //creation balise figure pour titre
-            const figure = document.createElement('figure');
-            figure.appendChild(newImage);
-            figure.appendChild(figcaption);
 
-            //ajout figure dans gallery
-            const gallery = document.querySelector('.gallery'); 
-            gallery.appendChild(figure); 
-           
-            //ajout image modal
-            const modalGallery = document.querySelector('.gallery-modal');
-            if (modalGallery) {
-                const modalFigure = figure.cloneNode(true);
-                modalGallery.appendChild(modalFigure);
-            }
-
-            //ajopute btn de suppression a img
-            addDeleteButton();
-            // Fermer modal après ajout
-            closeModal(e);
-
-        } else {
-            console.log("Pas d'url trouvée");
-        }
+        //appel la fonction pour envoyer le projet
+        if(pushForm(saveProject, token)){
+            // si le push reussi; on ferme la modal
+            closeModal();
+        };
     
     } catch (error) {
         console.log("Erreur lors de l'envoi des données :", error);
     }
-});
+}
 
 //mettre btn valider en vert si tout les champ sont remplis
 document.getElementById("imageUpload").addEventListener("change", updateBtn);
@@ -691,54 +414,44 @@ function updateBtn() {
     const file = document.getElementById("imageUpload").files[0]; //détecte si img sélectionner
     const titleUpload = document.getElementById("titleUpload").value.trim(); //detecte si titre rempli
     const categoryUpload = document.getElementById("categoryUpload").value; //détecte si cat chooisie
-    const addProjectBtn = document.getElementById("addProject");
-
-    //si tout les champs sont rempli, mettre btn en vert, si non, en gris
-    if (file && titleUpload && categoryUpload !== "0") {
-        addProjectBtn.style.backgroundColor = "rgba(29, 97, 84, 1)"; //mettre background en vert
-        addProjectBtn.disabled = false;
-    } else {
-        addProjectBtn.style.backgroundColor = "gray"; // remettre en gris
-        addProjectBtn.disabled = true;
+    //si tout les champs sont rempli, mettre btn en vert
+    if (file && titleUpload && categoryUpload) {
+        valideProjectBtn.style.backgroundColor = "rgba(29, 97, 84, 1)"; //mettre background en vert
+        valideProjectBtn.disabled = false;
     }
 }
 
 //remettre la modal a 0 après ajout projet
 function resetModal(){
-    const titleUpload = document.getElementById("titleUpload");
-    const categoryUpload = document.getElementById ("categoryUpload");
-    const fileInput = document.getElementById("imageUpload");
-    const gallery = document.querySelector(".gallery-modal");
-    const form = document.getElementById("addNewProject");
-    const imagePreview = document.getElementById("imagePreview");
-    const addProjectBtn = document.getElementById("addProject");
-    const backButton = document.getElementById("back");
-    const galleryText = document.querySelector(".modal-wrapper > p");
-    const customBtn = document.getElementById("customBtn");
-
     titleUpload.value = "";
     categoryUpload.selectedIndex = 0;
-    fileInput.value= "";
+    imageUpload.value= "";
+
+    let gallery = document.querySelector(".gallery-modal");
+    addProjectBtn.style.display = '';
 
     if (gallery) gallery.style.display = "grid";
-    if (customBtn) customBtn.style.display = "block"
+    if (imageUpload) imageUpload.style.display = "block"
     if (backButton) backButton.style.display = "none"; //remet btn pour ajouter un fichier
     if (form) form.style.display = "none"; // Cacher le formulaire
     if (galleryText) galleryText.textContent = "Galerie photo"; //remettre txt galerie photo
-    if (addProjectBtn) {
-        addProjectBtn.value = "Ajouter une photo"; //remettre btn ajouter photo qd retour
-        addProjectBtn.classList.remove("btn-valider"); //supp btn valider
-        addProjectBtn.style.backgroundColor ="rgba(29, 97, 84, 1)";//background btn ajouter photo
-    }       
+    
 
     if (imagePreview) {
         imagePreview.style.display = "none";
         imagePreview.src = "";
         document.querySelector(".btn-image").style.display = "block";
         document.getElementById("formatImage").style.display = "block";
-        const uploadBtn = document.getElementById("uploadBtn");
-        if (uploadBtn) uploadBtn.style.display = "block";  
+        const imageUpload = document.getElementById("imageUpload");
+        if (imageUpload) imageUpload.style.display = "block";  
     }
+
+    document.querySelectorAll(".gallery-modal .delete-project").forEach((btn) => {
+        btn.style.display = "block";
+    });
+
+    valideProjectBtn.style.backgroundColor = "";
+
     addDeleteButton();
 }
 
@@ -755,7 +468,12 @@ function addDeleteButton(){
 
         //ajout evenement click pour supp
         deleteBtn.addEventListener('click', function () {
-            const projectId = img.dataset.id; 
+            let projectId = img.id;
+
+            if(!projectId){
+                projectId = img.dataset.id;
+            }
+
             if (projectId) {
                 deleteProject(projectId, img);  // Appel de deleteProject avec ID du projet
             } else {
@@ -765,3 +483,168 @@ function addDeleteButton(){
         
     });
 }
+
+//envoie nouvel image
+async function pushForm(saveProject, token){
+    
+    const response = await fetch('http://localhost:5678/api/works', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
+        body: saveProject, 
+    });
+
+    if (!response.ok) {
+        throw new Error(`Erreur ${response.status} : ${response.statusText}`);
+    }
+
+    let result = await response.json();
+
+    if (result && result.imageUrl) {
+       
+        //ajout image gallery
+        const newImage = document.createElement('img');
+        newImage.src = result.imageUrl; 
+        newImage.alt = result.title; 
+        newImage.dataset.id = result.id; //ajoput id a image
+   
+        //création balise figcaption
+        const figcaption = document.createElement('figcaption');
+        figcaption.textContent = result.title;
+        
+        //creation balise figure pour titre
+        const figure = document.createElement('figure');
+        figure.appendChild(newImage);
+        figure.appendChild(figcaption);
+
+        //ajout figure dans gallery
+        gallery.appendChild(figure); 
+       
+        //ajout image modal
+        const modalGallery = document.querySelector('.gallery-modal');
+        if (modalGallery) {
+            const modalFigure = figure.cloneNode(true);
+            modalGallery.appendChild(modalFigure);
+        }
+        return true;
+    } else {
+        console.log("Pas d'url trouvée");
+    }
+}
+
+
+function editMode(){
+    let token = localStorage.getItem("token");
+
+    if (token) {
+        
+        let nouvelleDiv = document.createElement("div");
+        nouvelleDiv.classList.add("modeEdition");
+
+        let nouvelIcone = document.createElement("i");
+        nouvelIcone.classList.add("fa-regular", "fa-pen-to-square");
+
+        let nouveauParagraphe = document.createElement("p");
+        nouveauParagraphe.textContent = "Mode édition";
+
+        // Ajout des éléments à la div
+        nouvelleDiv.appendChild(nouvelIcone);
+        nouvelleDiv.appendChild(nouveauParagraphe);
+
+        // Vérifie si <header> existe
+        let header = document.querySelector("header");
+        header.appendChild(nouvelleDiv);
+
+        //cache les btn filtre
+        let categoriesDiv = document.querySelector('.categories');
+        if (categoriesDiv) {
+            categoriesDiv.style.visibility= "hidden";
+        }
+    }
+}
+
+//tranforme login en logout
+function changeLoginBtn(token){
+    if (errorMessage) {
+        errorMessage.style.display = "none";} //fait passer le dom(index.html) avant
+
+    if (token) {                                    //si connexion
+        loginBtn.innerText = "Logout";   //change login en logout
+        loginBtn.removeEventListener('click', loadLoginForm); 
+        loginBtn.addEventListener('click', logout);        
+    }else{
+        loginBtn.addEventListener('click', loadLoginForm); 
+    }
+}
+
+//fonction pour ajouter le btn modifier
+function addBtnModifier(token){
+//ajout btn modifier
+    if (token){
+        let portfolioSection = document.querySelector("#portfolio");
+         if (portfolioSection) {
+            let modifierProjetDiv = document.querySelector(".modifierProjet");
+
+            if (!modifierProjetDiv) {
+                modifierProjetDiv = document.createElement("div");
+                modifierProjetDiv.classList.add("modifierProjet");
+
+                let nouvelIcone = document.createElement('i');
+                nouvelIcone.classList.add("fa-regular", "fa-pen-to-square");
+
+                let nouveauLien = document.createElement("a");
+                nouveauLien.textContent = "modifier";
+                nouveauLien.href = "#modifier"; 
+                nouveauLien.classList.add("js-modal");
+              
+                modifierProjetDiv.appendChild(nouvelIcone);
+                modifierProjetDiv.appendChild(nouveauLien);
+
+                //insère div apres h2
+                let h2 = portfolioSection.querySelector("h2");
+                    h2.insertAdjacentElement("afterend", modifierProjetDiv);
+            }
+        }
+        
+        document.querySelectorAll('.js-modal').forEach(a => {
+            a.addEventListener('click', openModal);
+        });
+    }
+}
+
+//une fois le DOM pret
+document.addEventListener("DOMContentLoaded", function(){
+
+    let token = localStorage.getItem('token');
+
+    fetchCategories();
+    fetchProjects();
+    editMode();
+    changeLoginBtn(token);
+    addBtnModifier(token);    
+    
+    const modalOverlay = document.createElement("div");
+    modalOverlay.classList.add("modal-overlay");
+    document.body.appendChild(modalOverlay);
+
+    // Fermer la modal en cliquant sur l'overlay
+    modalOverlay.addEventListener("click", function () {
+        closeModal(new Event("click"));
+    });
+
+    /* ici on gere le formulaire d'ajout d'un projet
+    On verifie la validite du formulaire puis on le soumet avec sendForm
+    */
+    form.addEventListener("submit", function (event) {
+        event.preventDefault(); // Empêche la soumission par défaut
+
+        if (!form.checkValidity()) {
+            form.reportValidity(); // Affiche les messages HTML si invalide
+            return; // Stoppe l'exécution ici si le formulaire est invalide
+        }
+        sendForm(); 
+    });
+
+});

@@ -44,21 +44,23 @@
 				<p> Galerie photo </p>
 				<button class="js-modal-close"><i class="fa-solid fa-xmark"></i></button>
 				<hr>
-				<input type="submit" id="addProject" class="btn-add" value=" Ajouter une photo">
+				<input type="submit" id="addProject" class="btn-add" value="Ajouter une photo">
 				<button id="back"><i class="fa-solid fa-arrow-left"></i></button>
-				<form method="POST" id="addNewProject">
-					<div class="ajoutImage">
+				<form id="addNewProject">
+					<div class="ajoutImage"> 
 						<i class="btn-image fa-regular fa-image fa-4x"></i>
-						<input type="file" name="image" id="imageUpload" accept="image/jpeg, image/png" style="display: none;" required>
-						<button type="button" id="customBtn">+ Ajouter photo </button>
+						<input type="file" name="image" id="imageUpload" accept="image/jpeg, image/png" required>
+						<label for ='imageUpload'> + Ajouter une photo</label>
 						<p id="formatImage"> jpg, png : 4mo max </p>
 						<img id="imagePreview" style="display: none" alt="Aperçu de l'image">
 					</div>
 					<label for="title" id="title"> Titre </label>
 					<input type="text" name="title" id="titleUpload" required>
 					<label for="text" id="categorie"> Catégorie</label>
-					<select name="category" id="categoryUpload">
-					</select>
+					<select name="category" id="categoryUpload" required></select>
+					<button type="submit" id="btn-valide-project" style="margin-top: 30px;">
+						Valider
+					</button>
 				</form>
 			</div>
 		</aside>

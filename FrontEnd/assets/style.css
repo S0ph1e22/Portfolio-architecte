@@ -171,6 +171,7 @@ li:hover {
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
+ /*btn contact*/
 input[type="submit"]{
 	font-family: 'Syne';
 	font-weight: 700;
@@ -203,15 +204,12 @@ figcaption {
 }
 
 .categories button{
-	
 	border-radius: 60px;
 	height: 37px;
 	border-color: #1D6154;
-	text-align: center;
 	color:#1D6154;
 	background-color: white;
 	font-family: 'syne' ;
-	display: inline;
 	font-size: 16px;
 	padding: 7px 20px;
 	margin-left: 10px;
@@ -255,7 +253,6 @@ label{
 
 #email, #password{
 	height: 50px;
-	font-size: 1.2em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
@@ -267,23 +264,14 @@ button.btn-connection{
 	height: 36px;
 	width: 179px;
 	font-family: 'Syne';
-	font-weight: 700;
 	margin: 2em auto;
-	width: 180px;
-	text-align: center;
 }
 
 button.mdp-forgot{
 	background-color: #FFFEF8;
 	border: none;
 	text-decoration: underline;
-	height: 16px;
-	width: 150px;
-	text-align: center;
-	font-family: 'Work Sans';
-	size: 14px;
-	text-align: center;
-	margin: auto;
+	font-family: 'Work Sans'; 
 }
 
 /* mode édition */
@@ -291,7 +279,6 @@ button.mdp-forgot{
 .modeEdition {
     position: fixed;
     top: 0;    
-	right: 0;
 	left: 0;        
     background-color: black;  
 	width: 100%;
@@ -309,34 +296,25 @@ button.mdp-forgot{
     font-size: 18px;  
 }
 
-.modeEdition p {
-    margin: 0;       
-    text-transform: none; 
-}
-
 /*modifier projet*/
 #portfolio {
     text-align: center; 
 }
 .modifierProjet {
     display: inline-flex;   
-    align-items: center;    
     margin-left: 20px;      
-    position: relative;   
 	vertical-align: 5px;
 }
 
 .modifierProjet i {
     margin-right: 6px; 
     width: 15.58px;
-    height: 15.58px;
 }
 
 .modifierProjet a {
     text-decoration: none;
     color: black;
     font-size: 16px;
-    display: inline-block; 
 }
 
 
@@ -358,7 +336,6 @@ button.mdp-forgot{
     width: 100vw;
     height: 100vh;
     background: rgba(0, 0, 0, 0.3); 
-    z-index: 998; 
     display: none; 
 }
 
@@ -378,8 +355,6 @@ button.mdp-forgot{
 
 .modal p{
 	font-size: 26px;
-	height: 30px;
-	width: 173px;
 	position: absolute;
 	top: 60px;
 	transform: translateX(-50%);
@@ -418,13 +393,14 @@ button.js-modal-close{
 	color: rgba(179, 179, 179, 1);
 }
 
-.modal input[type="submit"]{
+input#addProject{
 	height: 36px;
 	width: 237px;
 	font-size: 14px;
 	position: absolute;
 	top: 607px;
 	transform: translateX(-50%);
+	border: none;
 }
 
 /*delete*/
@@ -434,11 +410,7 @@ button.js-modal-close{
 	background-color: black;
 	height: 17px;
 	width: 17px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
 	border-radius: 2px;
-	z-index: 10;
 	top: 5%;
 	left: 55px;
 }
@@ -453,10 +425,6 @@ i.btn-delete{
 
 /*ajout photo*/
 
-.btn-valider{
-	background-color: rgba(167, 167, 167, 1);
-}
-
 button#back{
 	font-size: 21px;
 	position: absolute;
@@ -464,36 +432,37 @@ button#back{
 	border: none;
 }
 
+#btn-valide-project{
+	font-family: 'Syne';
+	height: 36px;
+	width: 237px;
+	font-size: 14px;
+	position: absolute;
+	top: 570px;
+	transform: translateX(-50%);
+	border-radius: 60px;
+	border: none;
+	background-color: rgba(167, 167, 167, 1);
+	color:white;
+}
+
 #addNewProject {
     width: 420px;
     margin: 0 auto;
     padding: 20px;
-	justify-content: center;
-	align-items: center;
 	position: relative;
 }
 
-label#addPicture {
-    font-size: 16px;
-    margin-bottom: 8px;
-	margin-top: 80px;
-    display: block;
-    color: rgba(61, 61, 61, 1);
-}
 
 label#title{
 	position: absolute;
-	font-size: 14px;
-    margin-bottom: 4px; 
     margin-top: 40px; 
     display: block;
     color: rgba(61, 61, 61, 1);
 }
 
 label#categorie{
-	position: absolute;
-	font-size: 14px;
-	margin-bottom: 4px;  
+	position: absolute; 
     margin-top: 155px;  
     display: block;
     color: rgba(61, 61, 61, 1);
@@ -501,7 +470,6 @@ label#categorie{
 
 #categoryUpload{
 	position: absolute;
-	left: 50%; 
     transform: translateX(-50%); 
     width: 420px;
     padding: 10px;
@@ -513,7 +481,6 @@ label#categorie{
 }
 
 input#titleUpload{
-	left: 50%; 
     transform: translateX(-50%); 
 	position: absolute; 
 	width: 400px;
@@ -544,20 +511,6 @@ p#formatImage{
 	top: 135px;
 }
 
-#customBtn{
-	position: absolute;
-	transform: translateX(-50%); 
-	left: 50%; 
-	border-radius: 50px;
-	background-color: rgba(203, 214, 220, 1);
-	font-size: 14px;
-	border: none;
-	top: 90px;
-	width: 173px;
-	height: 36px;
-	color: rgba(48, 102, 133, 1);
-}
-
 #imagePreview{
 	max-width: 100%;
 	max-height: 169px;
@@ -566,3 +519,19 @@ p#formatImage{
     transform: translateX(-50%); 
 }
 
+/*ajout fichier*/
+
+input[type="file"] {
+	width: 0;
+  }
+  
+  input[type="file"] + label {
+	position: absolute;
+	transform: translateX(-50%); 
+	background-color: rgba(203, 214, 220, 1);
+	color: rgba(48, 102, 133, 1);
+	border: none;
+	border-radius: 50px;
+	top: 90px;
+	padding: 10px;
+  }
