@@ -24,9 +24,7 @@ async function fetchProjects() {
         const response = await fetch("http://localhost:5678/api/works");
         if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
 
-        const projects = await response.json();
-        console.log("Données récupérées :", projects);
-        
+        const projects = await response.json();    
         if (!gallery) {
             console.error("Élément .gallery non trouvé");
             return;
@@ -53,10 +51,8 @@ async function fetchProjectsByCategory(categoryId) {
         if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
 
         const projects = await response.json();
-        console.log("Données récupérées par categorie :", projects);
 
         if (!gallery) {
-            console.error("Élément .gallery non trouvé");
             return;
         }
 
@@ -348,9 +344,7 @@ document.getElementById("back").addEventListener("click", function(){
 async function deleteProject(projectId, imgElement) {
     try {
         const token = localStorage.getItem('token');
-        console.log(token);
         if (!token) {
-            console.log("Token non trouvé. Vous devez être connecté.");
             return;
         }
 
@@ -362,18 +356,13 @@ async function deleteProject(projectId, imgElement) {
             }
         });
 
-        console.log(response);
-
         const responseText = await response.text();
-        console.log("Statut HTTP :", response.status); //(erreur 204 : projet deleted)
-
         if (!response.ok) {
             throw new Error(`Erreur lors de la suppression du projet: ${response.status}`);
         }
 
         // Supprimer l'image du modal
         imgElement.parentElement.remove(); //supp img + icone
-        console.log(`Le projet ${projectId} a bien été supprimé de la modal`);
      } catch (error) {
         console.error("Erreur lors de la suppression du projet :", error);
     }
@@ -383,7 +372,6 @@ async function deleteProject(projectId, imgElement) {
         if (projectInGallery) {
             const figureToRemove = projectInGallery.closest('figure'); //trouve l'élément parent
             figureToRemove.remove();
-            console.log(` Le projet ${projectId} a bien été supprimé de la galerie.`);
         }
 }
 
@@ -418,7 +406,6 @@ async function fetchCategories() {
         const response = await fetch("http://localhost:5678/api/categories");
         if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
         const categories = await response.json();
-        console.log("Catégories récupérées pour la modal:", categories);
         
         // vide les select pour pas les afficher plusieurs fois
         categorySelect.innerHTML = '';
@@ -471,7 +458,7 @@ function sendForm(){
         const token = localStorage.getItem('token');
 
         if (!token){
-            console.log ("Erreur, vous devez être connecté pour ajouter un projet.");
+            console.error("Erreur, vous devez être connecté pour ajouter un projet.");
             return
         }
 
@@ -482,7 +469,7 @@ function sendForm(){
         };
     
     } catch (error) {
-        console.log("Erreur lors de l'envoi des données :", error);
+        console.error("Erreur lors de l'envoi des données :", error);
     }
 }
 
@@ -534,6 +521,7 @@ function resetModal(){
     });
 
     valideProjectBtn.style.backgroundColor = "";
+    fileError.style.display = "none";
 
     addDeleteButton();
     errorAddPicture();
@@ -634,9 +622,7 @@ async function pushForm(saveProject, token){
             modalGallery.appendChild(modalFigure);
         }
         return true;
-    } else {
-        console.log("Pas d'url trouvée");
-    }
+    } 
 }
 
 //une fois le DOM pret
