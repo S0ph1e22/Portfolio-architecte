@@ -517,6 +517,7 @@ p#formatImage{
 	position: absolute;
 	left: 50%; 
     transform: translateX(-50%); 
+	top: 100px;
 }
 
 /*ajout fichier*/
