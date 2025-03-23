@@ -315,7 +315,7 @@ imageUpload.addEventListener("change", (event) => {
         reader.onload = function(e) {
             imagePreview.src = e.target.result;
             imagePreview.style.display = "block"; // afficher aperçu de l'image
-            imageUpload.style.display = "none"; // cacher bouton ajouter photo
+            document.querySelector("label[for='imageUpload']").style.display = "none"; //cacher btn pour ajouter une image
             document.querySelector(".btn-image").style.display = "none"; // cacher icone image
             document.getElementById("formatImage").style.display = "none"; //cacher txt format image
             if (modalWrapper) {
@@ -435,6 +435,8 @@ function resetModal(){
     if (backButton) backButton.style.display = "none"; //remet btn pour ajouter un fichier
     if (form) form.style.display = "none"; // Cacher le formulaire
     if (galleryText) galleryText.textContent = "Galerie photo"; //remettre txt galerie photo
+    document.querySelector("label[for='imageUpload']").style.display = "block"; //remettre btn pour ajouter photo
+
     
 
     if (imagePreview) {

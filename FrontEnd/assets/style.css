@@ -502,13 +502,13 @@ i.btn-image{
 	position: absolute;
 	left: 50%; 
     transform: translateX(-50%); 
-	top: 20px;
+	top: 120px;
 	color: rgba(185, 197, 204, 1);
 }
 
 p#formatImage{
 	font-size: 10px;
-	top: 135px;
+	top: 235px;
 }
 
 #imagePreview{
@@ -527,11 +527,11 @@ input[type="file"] {
   
   input[type="file"] + label {
 	position: absolute;
-	transform: translateX(-50%); 
 	background-color: rgba(203, 214, 220, 1);
 	color: rgba(48, 102, 133, 1);
 	border: none;
 	border-radius: 50px;
-	top: 90px;
+	top: 190px;
 	padding: 10px;
+	left: 150px;
   }
