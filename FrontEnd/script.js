@@ -15,8 +15,8 @@ const titleUpload = document.getElementById("titleUpload"); //champ pour écrire
 const categoryUpload = document.getElementById ("categoryUpload"); //choisir une categorie
 const imagePreview = document.getElementById("imagePreview"); //preview de l'img
 const imageUpload = document.getElementById("imageUpload"); //btn pour choisir un fichier a ajouter
+const fileError = document.getElementById("fileError");
 
-// PAGE GALLERIE
 
 // Récupérer les projets et les afficher
 async function fetchProjects() {
@@ -170,7 +170,88 @@ function logout(){
    
 }
 
+//tranforme login en logout
+function changeLoginBtn(token){
+    if (errorMessage) {
+        errorMessage.style.display = "none";} //fait passer le dom(index.html) avant
+
+    if (token) {                                    //si connexion
+        loginBtn.innerText = "Logout";   //change login en logout
+        loginBtn.removeEventListener('click', loadLoginForm); 
+        loginBtn.addEventListener('click', logout);        
+    }else{
+        loginBtn.addEventListener('click', loadLoginForm); 
+    }
+}
+
+
 //PAGE AVEC LA MODAL
+
+//mode édition
+function editMode(){
+    let token = localStorage.getItem("token");
+
+    if (token) {
+        
+        let nouvelleDiv = document.createElement("div");
+        nouvelleDiv.classList.add("modeEdition");
+
+        let nouvelIcone = document.createElement("i");
+        nouvelIcone.classList.add("fa-regular", "fa-pen-to-square");
+
+        let nouveauParagraphe = document.createElement("p");
+        nouveauParagraphe.textContent = "Mode édition";
+
+        // Ajout des éléments à la div
+        nouvelleDiv.appendChild(nouvelIcone);
+        nouvelleDiv.appendChild(nouveauParagraphe);
+
+        // Vérifie si <header> existe
+        let header = document.querySelector("header");
+        header.appendChild(nouvelleDiv);
+
+        //cache les btn filtre
+        let categoriesDiv = document.querySelector('.categories');
+        if (categoriesDiv) {
+            categoriesDiv.style.visibility= "hidden";
+        }
+    }
+}
+
+//fonction pour ajouter le btn modifier
+function addBtnModifier(token){
+    //ajout btn modifier
+        if (token){
+            let portfolioSection = document.querySelector("#portfolio");
+             if (portfolioSection) {
+                let modifierProjetDiv = document.querySelector(".modifierProjet");
+    
+                if (!modifierProjetDiv) {
+                    modifierProjetDiv = document.createElement("div");
+                    modifierProjetDiv.classList.add("modifierProjet");
+    
+                    let nouvelIcone = document.createElement('i');
+                    nouvelIcone.classList.add("fa-regular", "fa-pen-to-square");
+    
+                    let nouveauLien = document.createElement("a");
+                    nouveauLien.textContent = "modifier";
+                    nouveauLien.href = "#modifier"; 
+                    nouveauLien.classList.add("js-modal");
+                  
+                    modifierProjetDiv.appendChild(nouvelIcone);
+                    modifierProjetDiv.appendChild(nouveauLien);
+    
+                    //insère div apres h2
+                    let h2 = portfolioSection.querySelector("h2");
+                        h2.insertAdjacentElement("afterend", modifierProjetDiv);
+                }
+            }
+            
+            document.querySelectorAll('.js-modal').forEach(a => {
+                a.addEventListener('click', openModal);
+            });
+        }
+    }
 
 //ouvrir la modal avec btn modifier
 let modal = null
@@ -455,6 +536,7 @@ function resetModal(){
     valideProjectBtn.style.backgroundColor = "";
 
     addDeleteButton();
+    errorAddPicture();
 }
 
 //recup btn delete car créer avec le dom donc pas dispo
@@ -485,6 +567,27 @@ function addDeleteButton(){
         
     });
 }
+
+//message d'erreur ajout fichier
+function errorAddPicture() {
+    // Cacher l'erreur dès qu'une image est sélectionnée
+    imageUpload.addEventListener("change", function() {
+        if (imageUpload.files.length > 0) {
+            fileError.style.display = "none"; 
+        }
+    });
+
+    // Vérifier si une image est sélectionnée avant validation
+    valideProjectBtn.addEventListener("click", function(event) {
+        if (!imageUpload.files.length) {
+            event.preventDefault(); 
+            fileError.style.display = "block"; // Afficher le message d'erreur
+        } else {
+            fileError.style.display = "none"; // Cacher l'erreur si img
+        }
+    });
+}
+errorAddPicture();
 
 //envoie nouvel image
 async function pushForm(saveProject, token){
@@ -536,86 +639,6 @@ async function pushForm(saveProject, token){
     }
 }
 
-
-function editMode(){
-    let token = localStorage.getItem("token");
-
-    if (token) {
-        
-        let nouvelleDiv = document.createElement("div");
-        nouvelleDiv.classList.add("modeEdition");
-
-        let nouvelIcone = document.createElement("i");
-        nouvelIcone.classList.add("fa-regular", "fa-pen-to-square");
-
-        let nouveauParagraphe = document.createElement("p");
-        nouveauParagraphe.textContent = "Mode édition";
-
-        // Ajout des éléments à la div
-        nouvelleDiv.appendChild(nouvelIcone);
-        nouvelleDiv.appendChild(nouveauParagraphe);
-
-        // Vérifie si <header> existe
-        let header = document.querySelector("header");
-        header.appendChild(nouvelleDiv);
-
-        //cache les btn filtre
-        let categoriesDiv = document.querySelector('.categories');
-        if (categoriesDiv) {
-            categoriesDiv.style.visibility= "hidden";
-        }
-    }
-}
-
-//tranforme login en logout
-function changeLoginBtn(token){
-    if (errorMessage) {
-        errorMessage.style.display = "none";} //fait passer le dom(index.html) avant
-
-    if (token) {                                    //si connexion
-        loginBtn.innerText = "Logout";   //change login en logout
-        loginBtn.removeEventListener('click', loadLoginForm); 
-        loginBtn.addEventListener('click', logout);        
-    }else{
-        loginBtn.addEventListener('click', loadLoginForm); 
-    }
-}
-
-//fonction pour ajouter le btn modifier
-function addBtnModifier(token){
-//ajout btn modifier
-    if (token){
-        let portfolioSection = document.querySelector("#portfolio");
-         if (portfolioSection) {
-            let modifierProjetDiv = document.querySelector(".modifierProjet");
-
-            if (!modifierProjetDiv) {
-                modifierProjetDiv = document.createElement("div");
-                modifierProjetDiv.classList.add("modifierProjet");
-
-                let nouvelIcone = document.createElement('i');
-                nouvelIcone.classList.add("fa-regular", "fa-pen-to-square");
-
-                let nouveauLien = document.createElement("a");
-                nouveauLien.textContent = "modifier";
-                nouveauLien.href = "#modifier"; 
-                nouveauLien.classList.add("js-modal");
-              
-                modifierProjetDiv.appendChild(nouvelIcone);
-                modifierProjetDiv.appendChild(nouveauLien);
-
-                //insère div apres h2
-                let h2 = portfolioSection.querySelector("h2");
-                    h2.insertAdjacentElement("afterend", modifierProjetDiv);
-            }
-        }
-        
-        document.querySelectorAll('.js-modal').forEach(a => {
-            a.addEventListener('click', openModal);
-        });
-    }
-}
-
 //une fois le DOM pret
 document.addEventListener("DOMContentLoaded", function(){
 
@@ -650,3 +673,4 @@ document.addEventListener("DOMContentLoaded", function(){
     });
 
 });
+
