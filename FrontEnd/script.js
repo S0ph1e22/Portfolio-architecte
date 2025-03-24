@@ -327,7 +327,12 @@ document.getElementById("back").addEventListener("click", function(){
  //affiche le formulaire 
  document.getElementById("addProject").addEventListener("click", function(e) {
     e.preventDefault();
-
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert("Vous devez être connecté pour pouvoir ajouter un projet");
+        return;
+    }
+    
     //selectionner gallery et form
    const gallery = document.querySelector(".gallery-modal");
  
@@ -336,6 +341,7 @@ document.getElementById("back").addEventListener("click", function(){
     if (galleryText) galleryText.textContent = "Ajout photo"; //changer le titre
     if (modalWrapper) modalWrapper.querySelectorAll('.delete-project').forEach(btn => btn.remove());
     addProjectBtn.style.display="none";
+    
 
     document.getElementById("back").style.display = "block";
 });
@@ -345,6 +351,7 @@ async function deleteProject(projectId, imgElement) {
     try {
         const token = localStorage.getItem('token');
         if (!token) {
+            alert("Vous devez être connecté pour pouvoir supprimé le projet");
             return;
         }
 
@@ -359,6 +366,8 @@ async function deleteProject(projectId, imgElement) {
         const responseText = await response.text();
         if (!response.ok) {
             throw new Error(`Erreur lors de la suppression du projet: ${response.status}`);
+            
+           
         }
 
         // Supprimer l'image du modal
