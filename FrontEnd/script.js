@@ -91,7 +91,6 @@ document.querySelector(".categories").addEventListener("click", function(event) 
         }else{
             fetchProjectsByCategory(null);      //affiche tous les projets !!
         }
-        
     }
 });
 
@@ -413,7 +412,7 @@ imageUpload.addEventListener("change", (event) => {
 //récup catégories dynamiquement + récup cat et afficher les btn de fitrage
 async function fetchCategories() {
     try {
-        //mm fonction que pour les btn filtres
+       
         const response = await fetch("http://localhost:5678/api/categories");
         if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
         const categories = await response.json();
@@ -434,9 +433,9 @@ async function fetchCategories() {
             categorySelect.appendChild(option);
         });
     
-        //les cat pour les btn de filtrage
+        //les cat pour les btn de filtrage, recup le btn tous
         let html = '<button class="btn-tous" name="Tous">Tous</button>'; 
-
+        // pour chaque cat, récup l'id et le nom de la catégorie
         categories.forEach(category => {
             html += `<button class="btn-category" name="${category.id}">${category.name}</button>`;
         });
