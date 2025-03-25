@@ -210,6 +210,8 @@ function editMode(){
         let categoriesDiv = document.querySelector('.categories');
         if (categoriesDiv) {
             categoriesDiv.style.visibility= "hidden";
+            categoriesDiv.style.marginTop = "5px";
+            categoriesDiv.style.marginBottom = "5px";
         }
     }
 }
