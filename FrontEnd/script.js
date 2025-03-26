@@ -44,10 +44,10 @@ async function fetchProjects() {
     }
 }
 
-//recupere les projets en fonction de l'ID de la category
+//btn filtre
 async function fetchProjectsByCategory(categoryId) {
     try {
-        const response = await fetch("http://localhost:5678/api/works");
+        const response = await fetch("http://localhost:5678/api/works");      //requete pour récup les projets
         if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
 
         const projects = await response.json();
@@ -60,27 +60,66 @@ async function fetchProjectsByCategory(categoryId) {
         let filteredProjects;   //vérifie si categorieID existe
 
         if (categoryId) {
-            filteredProjects = projects.filter(project => {     //si catID existe, filtre les projets
+            filteredProjects = projects.filter(project => {     //si catID existe, filtre les projets pour garder que ceux qui appartienne a la cat choisie
                 return project.categoryId === categoryId;       //verifie si catID du projet correspond a celui de l'argument
             });
         } else {
             filteredProjects = projects;        //si catID=tous, affiche tous les projets
-        }if (filteredProjects.length === 0) {
+        }if (filteredProjects.length === 0) { //si aucun projet ne correspond a la cat séléctionné, afficher msg d'erreur
             gallery.innerHTML = "<p>Aucun projet trouvé pour cette catégorie.</p>";
             return;
         }
 
-        filteredProjects.forEach(project => {           //affiche les projets en fct des cat (comme dans fetchProjects)
-            const projectElement = document.createElement("figure");
+        filteredProjects.forEach(project => {           //affiche les projets en fct des cat 
+            const projectElement = document.createElement("figure"); //affiche les projets en créer dynamiquement élément figure
             projectElement.innerHTML = `
-                <img src="${project.imageUrl}" alt="${project.title}">
-                <figcaption>${project.title}</figcaption>`;
-            gallery.appendChild(projectElement);
+                <img src="${project.imageUrl}" alt="${project.title}">  
+                <figcaption>${project.title}</figcaption>`; //ajouter une image et un titre
+            gallery.appendChild(projectElement);  //ajouter chaque projet a la galerie
         });
     } catch (error) {
         console.error("Erreur lors de la récupération des projets :", error);
     }
 }
+
+//récup catégories depuis l'api pour les afficher ds un select dans la modal et sous forme de btn pour les filtres
+async function fetchCategories() {
+    try {
+       
+        const response = await fetch("http://localhost:5678/api/categories");  //requete pour récup les catégories
+        if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
+        const categories = await response.json();
+        
+        // vide les select pour pas les afficher plusieurs fois
+        categorySelect.innerHTML = '';
+
+        // ajout option vide dans la modal
+        const defaultOption = document.createElement('option');
+        defaultOption.textContent = '';
+        categorySelect.appendChild(defaultOption);
+
+        // creer une option pour chaque cat récup + l'ajouter au select
+        categories.forEach(category => {
+            const option = document.createElement('option');
+            option.value = category.id;  
+            option.textContent = category.name;
+            categorySelect.appendChild(option);
+        });
+    
+        //créer btn filtre
+        let html = '<button class="btn-tous" name="Tous">Tous</button>'; //pour afficher tous les projets avec le btn tous
+        // pour chaque cat, récup l'id et le nom de la catégorie et insère btn créer dans le conteneur .categories
+        categories.forEach(category => {
+            html += `<button class="btn-category" name="${category.id}">${category.name}</button>`;
+        });
+
+        document.querySelector('.categories').innerHTML = html;
+
+    } catch (error) {
+        console.error("Erreur lors de la récupération des catégories :", error);
+    }
+}
+
 
 //filtrer les éléments par catégorie
 document.querySelector(".categories").addEventListener("click", function(event) {
@@ -366,9 +405,7 @@ async function deleteProject(projectId, imgElement) {
 
         const responseText = await response.text();
         if (!response.ok) {
-            throw new Error(`Erreur lors de la suppression du projet: ${response.status}`);
-            
-           
+            throw new Error(`Erreur lors de la suppression du projet: ${response.status}`);           
         }
 
         // Supprimer l'image du modal
@@ -409,45 +446,6 @@ imageUpload.addEventListener("change", (event) => {
     }
 });
 
-//récup catégories dynamiquement + récup cat et afficher les btn de fitrage
-async function fetchCategories() {
-    try {
-       
-        const response = await fetch("http://localhost:5678/api/categories");
-        if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
-        const categories = await response.json();
-        
-        // vide les select pour pas les afficher plusieurs fois
-        categorySelect.innerHTML = '';
-
-        // ajout option vide
-        const defaultOption = document.createElement('option');
-        defaultOption.textContent = '';
-        categorySelect.appendChild(defaultOption);
-
-        // creer une option pour chaque cat récup + l'ajouter au select
-        categories.forEach(category => {
-            const option = document.createElement('option');
-            option.value = category.id; 
-            option.textContent = category.name;
-            categorySelect.appendChild(option);
-        });
-    
-        //les cat pour les btn de filtrage, recup le btn tous
-        let html = '<button class="btn-tous" name="Tous">Tous</button>'; 
-        // pour chaque cat, récup l'id et le nom de la catégorie
-        categories.forEach(category => {
-            html += `<button class="btn-category" name="${category.id}">${category.name}</button>`;
-        });
-
-        document.querySelector('.categories').innerHTML = html;
-
-    } catch (error) {
-        console.error("Erreur lors de la récupération des catégories :", error);
-    }
-}
-
-
 //fonction form data pour envoyer le formulaire
 function sendForm(){
     const file = imageUpload.files[0]; // Vérifie si un fichier a été sélectionné
@@ -468,7 +466,7 @@ function sendForm(){
         const token = localStorage.getItem('token');
 
         if (!token){
-            console.error("Erreur, vous devez être connecté pour ajouter un projet.");
+            alert("Erreur, vous devez être connecté pour ajouter un projet.");
             return
         }
 
@@ -633,6 +631,7 @@ async function pushForm(saveProject, token){
         }
         return true;
     } 
+   
 }
 
 //une fois le DOM pret
