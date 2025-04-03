@@ -207,7 +207,7 @@ function logout(){
    
 }
 
-//tranforme login en logout
+//tranforme login en logout et charge le formulaire de connexion dans la page actuelle
 function changeLoginBtn(token){
     if (errorMessage) {   //si errormessage existe dans le dom
         errorMessage.style.display = "none";} // cache le pour pas que le msg reste affiché après la connexion
@@ -621,7 +621,7 @@ async function pushForm(saveProject, token){
         const figcaption = document.createElement('figcaption');
         figcaption.textContent = result.title;
         
-        //creation balise figure pour titre
+        //creation balise figure 
         const figure = document.createElement('figure');
         figure.appendChild(newImage);
         figure.appendChild(figcaption);
