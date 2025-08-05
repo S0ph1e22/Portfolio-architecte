@@ -2,3 +2,4 @@ node_modules
 images
 database.sqlite
 !images/.gitkeep
+.env
