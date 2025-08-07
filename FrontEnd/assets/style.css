@@ -171,6 +171,11 @@ li:hover {
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
+a{
+	text-decoration: none;
+	color: black;
+}
+
  /*btn contact*/
 input[type="submit"]{
 	font-family: 'Syne';
