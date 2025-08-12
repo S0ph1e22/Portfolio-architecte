@@ -74,7 +74,7 @@ async function fetchProjectsByCategory(categoryId) {
         filteredProjects.forEach(project => {           //affiche les projets en fct des cat 
             const projectElement = document.createElement("figure"); //affiche les projets en créer dynamiquement élément figure
             projectElement.innerHTML = `
-                <img src="${project.imageUrl}" alt="${project.title}">  
+                <img src="${window.location.href}/images/${project.imageUrl.split("/")[4]}" alt="${project.title}">  
                 <figcaption>${project.title}</figcaption>`; //ajouter une image et un titre
             gallery.appendChild(projectElement);  //ajouter chaque projet a la galerie
         });
