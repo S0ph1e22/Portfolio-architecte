@@ -21,7 +21,7 @@ const fileError = document.getElementById("fileError");
 // Récupérer les projets depuis l'api et les afficher
 async function fetchProjects() {
     try {
-        const response = await fetch("http://localhost:5678/api/works");
+        const response = await fetch("https://architecte.sophie-vincent.com/api/works");
         if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
 
         const projects = await response.json();     //transforme réponse http en objet js qu'il comprend
@@ -48,7 +48,7 @@ async function fetchProjects() {
 //btn filtre : afficher les projets en fonction d'une cat séléctionnée
 async function fetchProjectsByCategory(categoryId) {
     try {
-        const response = await fetch("http://localhost:5678/api/works");      //requete pour récup les projets ds l'api
+        const response = await fetch("https://architecte.sophie-vincent.com/api/works");      //requete pour récup les projets ds l'api
         if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
 
         const projects = await response.json();
@@ -87,7 +87,7 @@ async function fetchProjectsByCategory(categoryId) {
 async function fetchCategories() {
     try {
        
-        const response = await fetch("http://localhost:5678/api/categories");  //requete pour récup les catégories
+        const response = await fetch("https://architecte.sophie-vincent.com/api/categories");  //requete pour récup les catégories
         if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
         const categories = await response.json();
         
@@ -163,7 +163,7 @@ function login(){
     }
     
     //envoie des données a l'api
-    fetch('http://localhost:5678/api/users/login', {
+    fetch('https://architecte.sophie-vincent.com/api/users/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password })
@@ -401,7 +401,7 @@ async function deleteProject(projectId, imgElement) {
             return;
         }
 
-        const response = await fetch(`http://localhost:5678/api/works/${projectId}`, { //envoi requete delete a l'api pour supp le projet en utilisant son id
+        const response = await fetch(`https://architecte.sophie-vincent.com/api/works/${projectId}`, { //envoi requete delete a l'api pour supp le projet en utilisant son id
             method: 'DELETE',
             headers: {
                 'Accept' : '*/*',
@@ -594,7 +594,7 @@ errorAddPicture();
 //envoie nouvel image
 async function pushForm(saveProject, token){
     
-    const response = await fetch('http://localhost:5678/api/works', { //envoie requete post a l'api
+    const response = await fetch('https://architecte.sophie-vincent.com/api/works', { //envoie requete post a l'api
         method: 'POST',
         headers: {
             'Accept': 'application/json',
