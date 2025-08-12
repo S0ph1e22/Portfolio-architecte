@@ -36,9 +36,9 @@ async function fetchProjects() {
         projects.forEach(project => {                                   
             const projectElement = document.createElement("figure");
             projectElement.innerHTML = `                                    
-                <img id="${project.id}" src="${project.imageUrl}" alt="${project.title}">     
+                <img id="${project.id}" src="${window.location.href}/${project.imageUrl.split("/")[3]}" alt="${project.title}">     
                 <figcaption>${project.title}</figcaption>`; 
-            gallery.appendChild(projectElement);   
+            gallery.appendChild(projectElement);
         });
     } catch (error) {
         console.error("Erreur lors de la récupération des projets :", error);
