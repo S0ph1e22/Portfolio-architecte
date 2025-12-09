@@ -1,140 +1,120 @@
-const gallery = document.querySelector(".gallery"); //grd gallery
-const loginBtn = document.getElementById("loginBtn"); //btn login
-const loginSection = document.getElementById("page-login"); //page login avec formulaire
-const errorMessage = document.getElementById('errorMessage'); //message d'erreur si champs du form incorrect
-const modalWrapper = document.querySelector(".modal-wrapper" ); //la modal
-const imagesInModal = modalWrapper.querySelectorAll('img'); //img du modal
-const deleteBtn = document.createElement('button'); //btn supp img modal
-const valideProjectBtn = document.getElementById("btn-valide-project"); //btn valider projet
-const galleryText = document.querySelector(".modal-wrapper > p"); //remettre le titre de la gallery modal
-const form = document.getElementById("addNewProject"); //formulaire pour ajouter projet
-const backButton = document.getElementById("back"); //fleche retour
-const addProjectBtn = document.getElementById("addProject"); //btn ajouter une photo modal
-const categorySelect = document.querySelector('#categoryUpload'); //élément select pour choisir les catégories
-const titleUpload = document.getElementById("titleUpload"); //champ pour écrire un titre
-const categoryUpload = document.getElementById ("categoryUpload"); //choisir une categorie
-const imagePreview = document.getElementById("imagePreview"); //preview de l'img
-const imageUpload = document.getElementById("imageUpload"); //btn pour choisir un fichier a ajouter
+const gallery = document.querySelector(".gallery");
+const loginBtn = document.getElementById("loginBtn");
+const errorMessage = document.getElementById("errorMessage");
+const modalWrapper = document.querySelector(".modal-wrapper");
+const valideProjectBtn = document.getElementById("btn-valide-project");
+const galleryText = document.querySelector(".modal-wrapper > p");
+const form = document.getElementById("addNewProject");
+const backButton = document.getElementById("back");
+const addProjectBtn = document.getElementById("addProject");
+const categorySelect = document.querySelector('#categoryUpload');
+const titleUpload = document.getElementById("titleUpload");
+const imagePreview = document.getElementById("imagePreview");
+const imageUpload = document.getElementById("imageUpload");
 const fileError = document.getElementById("fileError");
 
+const API_URL = "http://localhost:5678/api";
 
-// Récupérer les projets depuis l'api et les afficher
+// Récupérer les projets
+
 async function fetchProjects() {
     try {
-        const response = await fetch("https://architecte.sophie-vincent.com/api/works");
+        const response = await fetch(`${API_URL}/works`);
         if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
 
-        const projects = await response.json();     //transforme réponse http en objet js qu'il comprend
-        if (!gallery) {
-            console.error("Élément .gallery non trouvé");
-            return;
-        }
+        const projects = await response.json();
+        gallery.innerHTML = "";
 
-        gallery.innerHTML = "";  //vide la galerie avant d'afficher les nouveaux projets
-
-        //parcours chaque projet de la liste, crée un nouvel element figure, insère une image et une figcaption et ajoute chaque projet à la gallery
-        projects.forEach(project => {                                   
+        projects.forEach(project => {
             const projectElement = document.createElement("figure");
-            projectElement.innerHTML = `                                    
-                <img id="${project.id}" src="${window.location.href}/images/${project.imageUrl.split("/")[4]}" alt="${project.title}">     
-                <figcaption>${project.title}</figcaption>`; 
+            projectElement.innerHTML = `
+                <img id="${project.id}" src="${project.imageUrl}" alt="${project.title}">
+                <figcaption>${project.title}</figcaption>
+            `;
             gallery.appendChild(projectElement);
         });
     } catch (error) {
         console.error("Erreur lors de la récupération des projets :", error);
+        gallery.innerHTML = "<p>Impossible de charger les projets.</p>";
     }
 }
 
-//btn filtre : afficher les projets en fonction d'une cat séléctionnée
-async function fetchProjectsByCategory(categoryId) {
-    try {
-        const response = await fetch("https://architecte.sophie-vincent.com/api/works");      //requete pour récup les projets ds l'api
-        if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
+// Récupérer les catégories
 
-        const projects = await response.json();
-
-        if (!gallery) {
-            return;
-        }
-
-        gallery.innerHTML = ""; //vide la galerie avant d'afficher les nouveaux projets
-        let filteredProjects;  
-        //vérifie si categorieID existe
-        if (categoryId) {
-            filteredProjects = projects.filter(project => {     //si catID existe, filtre les projets pour garder que ceux qui appartienne a la cat choisie
-                return project.categoryId === categoryId;       //verifie si catID du projet correspond a celui de l'argument
-            });
-        } else {
-            filteredProjects = projects;        //si catID=null, affiche tous les projets
-        }if (filteredProjects.length === 0) { //si aucun projet ne correspond a la cat séléctionné, afficher msg d'erreur
-            gallery.innerHTML = "<p>Aucun projet trouvé pour cette catégorie.</p>";
-            return;
-        }
-
-        filteredProjects.forEach(project => {           //affiche les projets en fct des cat 
-            const projectElement = document.createElement("figure"); //affiche les projets en créer dynamiquement élément figure
-            projectElement.innerHTML = `
-                <img src="${window.location.href}/images/${project.imageUrl.split("/")[4]}" alt="${project.title}">  
-                <figcaption>${project.title}</figcaption>`; //ajouter une image et un titre
-            gallery.appendChild(projectElement);  //ajouter chaque projet a la galerie
-        });
-    } catch (error) {
-        console.error("Erreur lors de la récupération des projets :", error);
-    }
-}
-
-//récup catégories depuis l'api pour les afficher ds un select dans la modal et sous forme de btn pour les filtres
 async function fetchCategories() {
     try {
-       
-        const response = await fetch("https://architecte.sophie-vincent.com/api/categories");  //requete pour récup les catégories
+        const response = await fetch(`${API_URL}/categories`);
         if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
-        const categories = await response.json();
-        
-        // vide les select pour pas les afficher plusieurs fois
-        categorySelect.innerHTML = '';
 
-        // ajout option vide dans la modal
+        const categories = await response.json();
+        categorySelect.innerHTML = '';
         const defaultOption = document.createElement('option');
         defaultOption.textContent = '';
         categorySelect.appendChild(defaultOption);
 
-        // creer une option pour chaque cat récup + l'ajouter au select
-        categories.forEach(category => {
+        let html = '<button class="btn-tous" name="Tous">Tous</button>';
+        categories.forEach(cat => {
             const option = document.createElement('option');
-            option.value = category.id;  
-            option.textContent = category.name;
+            option.value = cat.id;
+            option.textContent = cat.name;
             categorySelect.appendChild(option);
-        });
-    
-        //créer btn filtre
-        let html = '<button class="btn-tous" name="Tous">Tous</button>'; //pour afficher tous les projets avec le btn tous
-        // pour chaque cat, récup l'id et le nom de la catégorie et insère btn créer dans le conteneur .categories
-        categories.forEach(category => {
-            html += `<button class="btn-category" name="${category.id}">${category.name}</button>`;
+
+            html += `<button class="btn-category" name="${cat.id}">${cat.name}</button>`;
         });
 
         document.querySelector('.categories').innerHTML = html;
-
     } catch (error) {
         console.error("Erreur lors de la récupération des catégories :", error);
     }
 }
 
+// Filtrer par catégorie
 
-//filtrer les éléments par catégorie en fonction du click
 document.querySelector(".categories").addEventListener("click", function(event) {
-    if (event.target.tagName === "BUTTON") { //si clique sur autre chose que button, il ne se passe rien
-        const categoryID = event.target.name; //recup l'id de la cat
-        if (event.target.name !== "Tous"){
-            fetchProjectsByCategory(parseInt(categoryID));  //filtre projet avec id de la cat
-        }else{
-            fetchProjectsByCategory(null);      //affiche tous les projets !!
+    if (event.target.tagName === "BUTTON") {
+        const categoryID = parseInt(event.target.name); // converti en nombre
+
+        if (!isNaN(categoryID)) {
+            fetchProjectsByCategory(categoryID); // filtre les projets
+        } else {
+            fetchProjectsByCategory(null); // affiche tous les projets si "Tous"
         }
     }
 });
 
-//charger le template de la page de login
+async function fetchProjectsByCategory(categoryId) {
+    try {
+        const response = await fetch(`${API_URL}/works`);
+        if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
+        const projects = await response.json();
+
+        let filteredProjects;
+        if (categoryId === null) {
+            filteredProjects = projects; // afficher tous
+        } else {
+            filteredProjects = projects.filter(p => p.categoryId === categoryId);
+        }
+
+        gallery.innerHTML = "";
+
+        if (filteredProjects.length === 0) {
+            gallery.innerHTML = "<p>Aucun projet trouvé pour cette catégorie.</p>";
+            return;
+        }
+
+        filteredProjects.forEach(project => {
+            const projectElement = document.createElement("figure");
+            projectElement.innerHTML = `
+                <img src="${project.imageUrl}" alt="${project.title}">
+                <figcaption>${project.title}</figcaption>
+            `;
+            gallery.appendChild(projectElement);
+        });
+    } catch (error) {
+        console.error("Erreur lors du filtrage des projets :", error);
+    }
+}
+
 function loadLoginForm() {
     // Utiliser fetch pour charger le contenu du fichier login.html
     fetch('login.html')     //va chercher le fichier login.html
@@ -149,7 +129,8 @@ function loadLoginForm() {
 }
 
 
-//fonction pour se connecter 
+// Login / Logout local
+
 function login(){
 
     //recup email, mdp et où afficher les erreurs
@@ -163,7 +144,7 @@ function login(){
     }
     
     //envoie des données a l'api
-    fetch('https://architecte.sophie-vincent.com/api/users/login', {
+    fetch(`${API_URL}/users/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password })
@@ -401,7 +382,7 @@ async function deleteProject(projectId, imgElement) {
             return;
         }
 
-        const response = await fetch(`https://architecte.sophie-vincent.com/api/works/${projectId}`, { //envoi requete delete a l'api pour supp le projet en utilisant son id
+        const response = await fetch(`${API_URL}/works/${projectId}`, { //envoi requete delete a l'api pour supp le projet en utilisant son id
             method: 'DELETE',
             headers: {
                 'Accept' : '*/*',
@@ -594,7 +575,7 @@ errorAddPicture();
 //envoie nouvel image
 async function pushForm(saveProject, token){
     
-    const response = await fetch('https://architecte.sophie-vincent.com/api/works', { //envoie requete post a l'api
+    const response = await fetch(`${API_URL}/works`, { //envoie requete post a l'api
         method: 'POST',
         headers: {
             'Accept': 'application/json',
